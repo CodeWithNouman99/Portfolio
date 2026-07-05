@@ -6,10 +6,11 @@ import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Skills from "./pages/Skills";
 import Contact from "./pages/Contact";
-
+import ScrollToTop from "./components/ScrollToTop";
 export default function App() {
   return (
     <BrowserRouter>
+     <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-1">
