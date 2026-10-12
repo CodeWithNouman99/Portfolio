@@ -6,6 +6,17 @@ Welcome to my personal portfolio website! This portfolio showcases my skills, pr
 
 🔗 **Portfolio:** https://portfolio-gilt-tau-48.vercel.app/
 
+## 📸 Screenshots
+
+![Hero section](./screenshots/hero.png)
+
+<table>
+  <tr>
+    <td width="50%"><img src="./screenshots/why-hire-me.png" alt="Why hire me section"/></td>
+    <td width="50%"><img src="./screenshots/projects.png" alt="Projects section"/></td>
+  </tr>
+</table>
+
 ## 📂 GitHub Repository
 
 🔗 **Repository:** https://github.com/CodeWithNouman99/Portfolio
@@ -98,7 +109,7 @@ http://localhost:5173
 **Nouman Aslam**
 
 * GitHub: https://github.com/CodeWithNouman99
-* LinkedIn: https://www.linkedin.com/in/nouman-aslam/
+* LinkedIn: https://www.linkedin.com/in/nouman-aslam-a9a3a2333
 * Email: mrnoumannomi7@gmail.com
 
 ## ⭐ Support
