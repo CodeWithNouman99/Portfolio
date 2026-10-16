@@ -93,20 +93,23 @@ function PreviewCard({ cert, onOpen }) {
         aria-label={image ? `Enlarge ${cert.title} certificate` : undefined}
         className="relative mt-6 flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-card bg-white/5 p-3 disabled:cursor-default"
       >
-        <AnimatePresence mode="wait">
-          {image && (
-            <motion.img
-              key={cert.id}
-              src={image}
-              alt={`${cert.title} certificate`}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.25 }}
-              className="max-h-full max-w-full rounded-[0.25rem] object-contain shadow-[0_12px_32px_-8px_rgba(0,0,0,0.6)]"
+        {/* All certificate images stay mounted and cross-fade with CSS, so fast hovering can never leave the card empty */}
+        {items.map((c) => {
+          const src = imageFor(c)
+          if (!src) return null
+          const active = c.id === cert?.id
+          return (
+            <img
+              key={c.id}
+              src={src}
+              alt={active ? `${c.title} certificate` : ''}
+              aria-hidden={!active}
+              className={`absolute inset-3 m-auto max-h-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] rounded-[0.25rem] object-contain shadow-[0_12px_32px_-8px_rgba(0,0,0,0.6)] transition-[opacity,transform] duration-300 ${
+                active ? 'scale-100 opacity-100' : 'scale-[0.97] opacity-0'
+              }`}
             />
-          )}
-        </AnimatePresence>
+          )
+        })}
       </button>
       {image && <p className="mt-3 text-[11px] leading-relaxed text-white/40">{card.hint}</p>}
     </div>
