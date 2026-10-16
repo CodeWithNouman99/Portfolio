@@ -1,0 +1,16 @@
+# Dependencies & builds
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Env files (keep the examples)
+.env
+.env.*
+!.env.example
+
+# Logs & OS/editor files
+*.log
+.DS_Store
+Thumbs.db
+.idea/
