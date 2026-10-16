@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "knowledge": "node scripts/build-knowledge.js",
+    "predev": "node scripts/build-knowledge.js",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "groq-sdk": "^1.6.0",
+    "helmet": "^8.3.0",
+    "mongoose": "^9.11.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
