@@ -1,0 +1,209 @@
+## Project page details (generated from the portfolio's project data; do not edit by hand)
+Fields not listed for a project are not written yet, so they are not known.
+
+### TeamMatch AI · P01 · page /projects/teammatch-ai
+- Description: Multi-agent system that matches a software house's developers to client requests.
+- Category: Full-Stack, AI Automation. Status: Completed.
+- Tech: MERN, n8n, RAG.
+- Code: https://github.com/CodeWithNouman99/teammatch-ai
+- Live demo: none yet.
+- Problem (summary card): Matching developers to a client request was done by hand: skills, free months and budget.
+- Solution (summary card): AI steps in n8n read the request, check who is free, score candidates and build two teams.
+- Result (summary card): Works end to end on sample requests: a Best Match and a Lowest Cost team in one run.
+- Overview: Turns a request like "2 React Native + 1 Rails developer, 6 months, $12k a month" into two ready teams: Best Match and Lowest Cost. Built solo in 1–2 weeks.
+- Challenges: Gemini sometimes sent the JSON as plain text, so I added a Structured Output Parser. To stop double-booking, approved members are booked as tentative.
+- Architecture (the "How it works" diagram on the page):
+  - Note: Approved team members are booked as tentative, so new requests see them as busy.
+  - Client request (email / form) → React dashboard
+  - React dashboard → Express API
+  - Express API → MongoDB
+  - Express API → n8n workflow
+  - n8n workflow → Read the request
+  - Read the request → Check who is free
+  - Check who is free → Score every candidate
+  - Score every candidate → Build 2 team options
+  - Build 2 team options → MongoDB
+  - MongoDB → React dashboard (approve a team)
+  - What each step does:
+    - Client request (email / form) (Input): A client asks the software house for developers.
+    - React dashboard (React): Where the team sees incoming requests.
+    - Express API (Express): Saves the request and hands it to the n8n workflow.
+    - n8n workflow (n8n): Runs the AI steps one after another.
+    - Read the request (AI step): Works out what the client actually needs.
+    - Check who is free (AI step): Leaves out developers who are already booked.
+    - Score every candidate (AI step): Rates each available developer against the request.
+    - Build 2 team options (AI step): Turns the scores into two teams to choose from.
+    - MongoDB (MongoDB): Stores the requests and the team options.
+    - React dashboard (approve a team) (React): A person picks a team; its members are booked as tentative.
+
+### Doctor Appointment Booking System · P02 · page /projects/doctor-appointment
+- Description: Patients book, doctors manage schedules, admins oversee.
+- Category: Full-Stack. Status: In Progress.
+- Tech: MERN.
+- Code: https://github.com/CodeWithNouman99/doctor-appointment-system-mern
+- Live demo: none yet.
+- Problem (summary card): Patients need a simple way to find a doctor and book a slot without calling the clinic.
+- Solution (summary card): A MERN app where patients browse doctors by speciality and book, and doctors and admins manage schedules.
+- Result (summary card): In progress: the patient pages are built, the backend is being built next.
+- Architecture (the "How it works" diagram on the page):
+  - Note: The frontend is built; the backend is in progress.
+  - Patient pages (React) → Express API
+  - Doctor & admin panel (React) → Express API
+  - Express API → MongoDB
+  - What each step does:
+    - Patient pages (React) (React): Patients browse doctors by speciality and book a slot.
+    - Doctor & admin panel (React) (React): Doctors manage their schedule; admins oversee everything.
+    - Express API (Express): REST endpoints for doctors and bookings (in progress).
+    - MongoDB (MongoDB): Stores doctors, patients and appointments.
+
+### DevBuddy · P03 · page /projects/devbuddy
+- Description: AI onboarding buddy for new developers at software houses.
+- Category: Full-Stack, AI Automation. Status: Completed.
+- Code: https://github.com/CodeWithNouman99/devbuddy-portal
+- Live demo: https://devbuddy-portal.vercel.app
+- Problem (summary card): A new developer's first week depends on someone being free to answer questions and assign tasks.
+- Solution (summary card): HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.
+- Result (summary card): HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.
+- Architecture (the "How it works" diagram on the page):
+  - Note: A separate daily flow sends each developer their next task and alerts the manager.
+  - HR portal (React) → n8n Webhook
+  - n8n Webhook → Google Sheets: developers & progress
+  - Google Sheets: developers & progress → WhatsApp welcome
+  - WhatsApp message → AI Buddy (Gemini)
+  - AI Buddy (Gemini) uses the tool Company docs
+  - AI Buddy (Gemini) uses the tool Google Sheets: developers & progress
+  - AI Buddy (Gemini) → WhatsApp reply
+  - Google Sheets: developers & progress → Manager dashboard
+  - What each step does:
+    - HR portal (React) (React): HR adds a new developer with a short form.
+    - n8n Webhook (n8n): Receives the new developer from the portal.
+    - Google Sheets: developers & progress (Google Sheets): Keeps each developer and the tasks they have finished.
+    - WhatsApp welcome (WhatsApp): The new developer gets a welcome message on day one.
+    - WhatsApp message (WhatsApp): The developer asks a question or says a task is done.
+    - AI Buddy (Gemini) (AI agent): Answers from company docs, logs questions and marks tasks done.
+    - Company docs (Tool): The onboarding documents the buddy answers from.
+    - WhatsApp reply (WhatsApp): Sends the buddy's answer back.
+    - Manager dashboard (React): The manager sees each new developer’s progress.
+
+### WhatsApp Doctor Appointment Bot · P04 · page /projects/whatsapp-bot
+- Description: AI agent that books, reschedules and cancels appointments.
+- Category: AI Automation. Status: Completed.
+- Tech: n8n.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
+- Live demo: none yet.
+- Problem (summary card): Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.
+- Solution (summary card): A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.
+- Result (summary card): Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.
+- Architecture (the "How it works" diagram on the page):
+  - WhatsApp Trigger → Filter
+  - Filter → AI Agent (Gemini + memory)
+  - AI Agent (Gemini + memory) uses the tool Google Sheets: doctors, patients, appointments
+  - AI Agent (Gemini + memory) uses the tool Date & Time
+  - AI Agent (Gemini + memory) → WhatsApp reply
+  - Schedule Trigger → Reminder AI Agent
+  - Reminder AI Agent → WhatsApp reminder
+  - Stripe Trigger → Payment confirmation on WhatsApp
+  - What each step does:
+    - WhatsApp Trigger (WhatsApp): Starts the flow when a patient sends a message.
+    - Filter (n8n): Passes on only the messages the bot should handle.
+    - AI Agent (Gemini + memory) (AI agent): Understands the message and books, reschedules or cancels.
+    - WhatsApp reply (WhatsApp): Sends the agent's answer back to the patient.
+    - Google Sheets: doctors, patients, appointments (Tool): The data the agent reads and updates.
+    - Date & Time (Tool): Gives the agent the current date and time.
+    - Schedule Trigger (n8n): Runs the reminder flow on a schedule.
+    - Reminder AI Agent (AI agent): Writes the reminder for upcoming appointments.
+    - WhatsApp reminder (WhatsApp): Delivers the reminder to the patient.
+    - Stripe Trigger (Stripe): Starts when a payment comes in.
+    - Payment confirmation on WhatsApp (WhatsApp): Confirms the payment to the patient.
+
+### Hospital RAG Agent · P05 · page /projects/hospital-rag
+- Description: Answers hospital questions from a knowledge-base PDF.
+- Category: AI Automation. Status: Completed.
+- Tech: n8n, Vector DB.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
+- Live demo: none yet.
+- Problem (summary card): Patients ask the same questions again and again, and the answers are buried in long PDFs.
+- Solution (summary card): New PDFs in Google Drive are embedded into Pinecone, and an AI agent answers questions from them.
+- Result (summary card): Answers come from the hospital's own documents; adding a PDF updates what it knows.
+- Architecture (the "How it works" diagram on the page):
+  - Google Drive Trigger (new PDF) → Download file
+  - Download file → Gemini embeddings
+  - Gemini embeddings → Pinecone vector store
+  - Chat message → AI Agent (Gemini + memory)
+  - AI Agent (Gemini + memory) → Hospital Data (Pinecone search)
+  - Hospital Data (Pinecone search) → Answer from the hospital's documents
+  - What each step does:
+    - Google Drive Trigger (new PDF) (Google Drive): Starts when a new PDF is added to the folder.
+    - Download file (n8n): Fetches the PDF so it can be processed.
+    - Gemini embeddings (Gemini): Turns the document text into vectors.
+    - Pinecone vector store (Pinecone): Keeps the vectors so they can be searched.
+    - Chat message (n8n): A question comes in from the chat.
+    - AI Agent (Gemini + memory) (AI agent): Decides what to look up and writes the answer.
+    - Hospital Data (Pinecone search) (Tool): Finds the most relevant parts of the documents.
+    - Answer from the hospital's documents (Output): The reply is based on what the PDFs say.
+
+### Client Onboarding Automation · P06 · page /projects/client-onboarding
+- Category: AI Automation. Status: Completed.
+- Tech: n8n.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
+- Live demo: none yet.
+- Problem (summary card): Every new client meant creating folders, a Slack channel, emails and a kickoff meeting by hand.
+- Solution (summary card): An intake form sends to n8n, which routes by project type and sets up Drive, Slack, Gmail and Calendar.
+- Result (summary card): One form submission sets up the whole client workspace for Web, Mobile or Automation projects.
+- Architecture (the "How it works" diagram on the page):
+  - Intake website → n8n Webhook
+  - n8n Webhook → Log to client sheet
+  - Log to client sheet → Switch: project type
+  - Switch: project type → Drive folders
+  - Drive folders → Slack channel + message
+  - Slack channel + message → Welcome email
+  - Welcome email → Kickoff meeting
+  - What each step does:
+    - Intake website (Website): The new client fills in one form.
+    - n8n Webhook (n8n): Receives the form and starts the workflow.
+    - Log to client sheet (Google Sheets): Saves the client details.
+    - Switch: project type (n8n): Sends Web, Mobile and Automation clients down their own branch.
+    - Drive folders (Google Drive): Creates the client folder with Contracts, Deliverables and Meeting Notes.
+    - Slack channel + message (Slack): Opens a channel for the project and posts the first message.
+    - Welcome email (Gmail): Sends the client a welcome email.
+    - Kickoff meeting (Calendar): Books the kickoff meeting in Google Calendar.
+
+### HireHub · P07 · page /projects/hirehub
+- Description: Job portal with Clerk auth.
+- Category: Frontend. Status: Completed.
+- Tech: React, Tailwind, React Router, Clerk.
+- Code: https://github.com/CodeWithNouman99/Hire-Hub-Frontend
+- Live demo: https://hire-hub-frontend.vercel.app
+- Problem (summary card): Job seekers need one place to browse openings, and employers a quick way to post them.
+- Solution (summary card): A React + Tailwind job portal with Clerk sign-in, job listings and a post-a-job flow.
+- Result (summary card): Live on Vercel.
+- Architecture (the "How it works" diagram on the page):
+  - React + Tailwind UI uses the tool Clerk sign-in
+  - React + Tailwind UI → React Router pages
+  - React Router pages → Job listings
+  - React Router pages → Post a job
+  - What each step does:
+    - React + Tailwind UI (React): The job portal the visitor sees.
+    - Clerk sign-in (Auth): Handles sign up and sign in.
+    - React Router pages (React Router): Home, jobs, about and contact pages.
+    - Job listings (Page): Visitors browse open jobs.
+    - Post a job (Page): Employers add a new job listing.
+
+### Cartify · P08 · page /projects/cartify
+- Description: E-commerce frontend.
+- Category: Frontend. Status: Completed.
+- Tech: React.
+- Code: https://github.com/CodeWithNouman99/Cartify-React_Project
+- Live demo: https://cartify-react-project.vercel.app
+- Problem (summary card): A shop front has to let people browse products and build a cart smoothly on any screen.
+- Solution (summary card): A React e-commerce frontend with product listings, a cart and a responsive layout.
+- Result (summary card): Live on Vercel, with the products page tuned for mobile.
+- Architecture (the "How it works" diagram on the page):
+  - React app → Products API
+  - Products API → Product listings
+  - Product listings → Cart
+  - What each step does:
+    - React app (React): The storefront, responsive on mobile and desktop.
+    - Products API (API): Product data is loaded from an API.
+    - Product listings (Page): Visitors browse the products.
+    - Cart (State): Visitors add products and see their cart.
