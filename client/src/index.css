@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Theme colours (RGB channels so Tailwind opacity like bg-paper/80 works) */
+  :root {
+    color-scheme: light;
+    --paper: 255 255 255;
+    --ink: 23 23 23;
+    --ink-heading: 17 17 17;
+    --secondary: rgba(0, 0, 0, 0.52);
+    --muted: rgba(0, 0, 0, 0.38);
+    --grey: 115 115 115;
+    --border: 230 230 230;
+    --surface: 245 245 245;
+    --surface-soft: 249 249 249;
+    --dark: 17 17 17;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --paper: 12 12 12;
+    --ink: 236 236 236;
+    --ink-heading: 250 250 250;
+    --secondary: rgba(255, 255, 255, 0.6);
+    --muted: rgba(255, 255, 255, 0.42);
+    --grey: 150 150 150;
+    --border: 38 38 38;
+    --surface: 28 28 28;
+    --surface-soft: 20 20 20;
+    --dark: 44 44 44;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink transition-colors duration-300;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-ink-heading;
+  }
+
+  p {
+    @apply leading-body text-secondary;
+  }
+
+  /* Keep anchored sections clear of the sticky navbar */
+  section[id] {
+    scroll-margin-top: 72px;
+  }
+
+  ::selection {
+    @apply bg-accent-20;
+  }
+}
+
+@layer components {
+  /* "ABOUT ME"-style section label */
+  .eyebrow {
+    @apply text-eyebrow uppercase tracking-eyebrow text-accent;
+  }
+
+  /* "HY! I AM" hero kicker */
+  .kicker {
+    @apply text-kicker uppercase tracking-kicker text-muted;
+  }
+
+  .section-title {
+    @apply text-[32px] font-bold leading-tight md:text-[56px];
+  }
+
+  /* Giant faded word behind section headings */
+  .watermark {
+    @apply pointer-events-none absolute select-none text-watermark uppercase text-ink/[0.04];
+  }
+}
+
+@layer utilities {
+  /* Scrollable without a visible scrollbar (carousels) */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
