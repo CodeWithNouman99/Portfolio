@@ -1,0 +1,30 @@
+export const skillMarquee = [
+  'MERN Stack',
+  'AI Automation',
+  'n8n Workflows',
+  'RAG Agents',
+  'REST APIs',
+  'React',
+  'Node.js',
+  'MongoDB',
+  'Multi-Agent Systems',
+  'Problem Solving',
+]
+
+export const techStack = [
+  'React',
+  'Node.js',
+  'Express',
+  'MongoDB',
+  'Tailwind CSS',
+  'JavaScript',
+  'n8n',
+  'Gemini',
+  'RAG',
+  'Vector DB',
+  'Git',
+  'GitHub',
+  'Vercel',
+  'Oracle SQL',
+  'Postman',
+]
