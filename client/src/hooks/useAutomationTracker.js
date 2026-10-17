@@ -18,6 +18,8 @@ export default function useAutomationTracker() {
   const [type, setType] = useState(null)
   const [queued, setQueued] = useState(false)
   const [finished, setFinished] = useState(false)
+  // false when the server has no n8n workflow connected: only "received" and "saved" can happen
+  const [automation, setAutomation] = useState(true)
   const runId = useRef(0)
   const phaseOne = useRef(Promise.resolve())
   const activeSince = useRef(0)
@@ -43,6 +45,7 @@ export default function useAutomationTracker() {
     setType(null)
     setQueued(false)
     setFinished(false)
+    setAutomation(true)
   }, [])
 
   const start = useCallback(() => {
@@ -71,6 +74,25 @@ export default function useAutomationTracker() {
       // A notified lead was clearly read by the AI, even if n8n sent no usable type (no chip then)
       ai: typeLabel || s.notified ? 'done' : 'queued',
       notified: s.notified ? 'done' : 'queued',
+    }
+
+    // No n8n connected: settle the two real steps and stop, so nothing promises an email that won't come
+    if (data?.automation === false) {
+      if (!instant) {
+        await phaseOne.current
+        if (!alive()) return
+      }
+      setSteps((prev) =>
+        prev.map((step, i) =>
+          i === 0 ? { state: 'done', ms: t.received ?? null }
+          : i === 1 ? { state: s.saved ? 'done' : 'skipped', ms: t.saved ?? null }
+          : { state: 'pending', ms: null },
+        ),
+      )
+      setAutomation(false)
+      setQueued(false)
+      setFinished(true)
+      return
     }
 
     if (instant) {
@@ -119,5 +141,5 @@ export default function useAutomationTracker() {
     setFinished(true)
   }, [])
 
-  return { steps, type, queued, finished, start, resolve, reset }
+  return { steps, type, queued, finished, automation, start, resolve, reset }
 }

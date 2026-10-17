@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Check, Clock3, Minus, RotateCcw } from 'lucide-react'
 import { contact } from '../data/contact'
 
-const { tracker } = contact
+const { tracker, trackerOffline } = contact
 
 // "0.4s", or "35ms" for the very fast steps
 const formatMs = (ms) => (ms < 100 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`)
@@ -91,21 +91,25 @@ function Step({ index, step, type, last, reduced }) {
   )
 }
 
-export default function AutomationTracker({ steps, type, finished, firstName, onReset, onHowBuilt, reduced }) {
+export default function AutomationTracker({ steps, type, finished, automation = true, firstName, onReset, onHowBuilt, reduced }) {
+  // Without n8n only the first two steps really happen, so the rest isn't shown at all
+  const shown = automation ? steps : steps.slice(0, 2)
+  const copy = automation ? tracker : { ...tracker, ...trackerOffline }
+
   // Screen readers get one summary line per settled step instead of every spinner change
-  const announced = steps
+  const announced = shown
     .map((s, i) => (s.state === 'pending' || s.state === 'active' ? null : `${tracker.steps[i]}: ${s.state}`))
     .filter(Boolean)
     .join('. ')
 
   return (
     <div className="text-left">
-      <p className="eyebrow">{tracker.eyebrow}</p>
-      <h3 className="mt-3 text-[20px] font-bold leading-snug md:text-[24px]">{tracker.title}</h3>
+      <p className="eyebrow">{copy.eyebrow}</p>
+      <h3 className="mt-3 text-[20px] font-bold leading-snug md:text-[24px]">{copy.title}</h3>
 
       <ol className="mt-6">
-        {steps.map((step, i) => (
-          <Step key={i} index={i} step={step} type={type} last={i === steps.length - 1} reduced={reduced} />
+        {shown.map((step, i) => (
+          <Step key={i} index={i} step={step} type={type} last={i === shown.length - 1} reduced={reduced} />
         ))}
       </ol>
       <p className="sr-only" aria-live="polite">
@@ -120,7 +124,7 @@ export default function AutomationTracker({ steps, type, finished, firstName, on
             transition={{ duration: 0.4, ease: 'easeOut' }}
             className="mt-6 border-t border-border pt-5"
           >
-            <p className="text-[14px] font-medium text-ink md:text-[15px]">{tracker.thanks(firstName)}</p>
+            <p className="text-[14px] font-medium text-ink md:text-[15px]">{copy.thanks(firstName)}</p>
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3 text-[13px] font-bold">
               <button
                 type="button"
@@ -134,7 +138,7 @@ export default function AutomationTracker({ steps, type, finished, firstName, on
                 onClick={onHowBuilt}
                 className="inline-flex items-center gap-1.5 text-ink underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
               >
-                {tracker.howBuilt} <ArrowRight size={13} />
+                {copy.howBuilt} <ArrowRight size={13} />
               </button>
             </div>
           </motion.div>

@@ -27,6 +27,12 @@ export const contact = {
     another: 'Send another message',
     howBuilt: "How it's built",
   },
+  // Used instead of the tracker text while no n8n workflow is connected on the server
+  trackerOffline: {
+    eyebrow: 'Message received',
+    title: 'Your message is in.',
+    thanks: (firstName) => `Thanks ${firstName}! Your message is saved. I'll reply by email soon.`,
+  },
 }
 
 export const footer = {

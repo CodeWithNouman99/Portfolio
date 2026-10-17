@@ -173,6 +173,7 @@ function ContactForm() {
               steps={tracker.steps}
               type={tracker.type}
               finished={tracker.finished}
+              automation={tracker.automation}
               firstName={firstName}
               reduced={reduced}
               onReset={sendAnother}

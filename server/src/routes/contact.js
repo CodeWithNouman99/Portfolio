@@ -38,7 +38,8 @@ function parseLead(body) {
 export const contactRouter = Router()
 
 // Response for the client's live tracker. Only these fields ever leave the server:
-// { ok, steps: { received, saved, forwarded, ai: { type } | null, notified }, queued, timings }
+// { ok, steps: { received, saved, forwarded, ai: { type } | null, notified }, queued, automation, timings }
+// automation is false when no n8n webhook is configured, so the client shows only the steps that can happen
 // timings are per-step durations in ms: `forwarded` is only the hand-off to n8n, `ai` is the
 // wait for n8n's reply (AI + email run inside it), and `notified` is null.
 contactRouter.post('/', limiter, async (req, res) => {
@@ -89,6 +90,7 @@ contactRouter.post('/', limiter, async (req, res) => {
     ok: true,
     steps: { received: true, saved: Boolean(doc), forwarded, ai, notified },
     queued: !notified,
+    automation: Boolean(config.n8nWebhookUrl),
     timings,
   })
 })
