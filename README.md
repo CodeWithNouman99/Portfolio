@@ -13,7 +13,6 @@ A full-stack portfolio: a React front end, an Express API, an AI chat assistant 
 - **AI chat assistant.** Ask about my projects, skills or availability. Answers come from Google Gemini, grounded only in my own data, with Groq as a fallback when Gemini is busy. It replies in the visitor's language (English, Roman Urdu, Urdu, Arabic), shows clickable project cards, and supports voice input and read-aloud.
 - **Live automation contact form.** Each message is saved to MongoDB and handed to an n8n workflow, where AI classifies it and emails me. A step-by-step tracker shows the visitor what happened, and only shows the steps that really ran.
 - **Project case studies.** Every flagship project has its own page with an architecture diagram.
-- **Built for every screen.** Mobile-first from 375px to 1440px, light and dark theme, reduced-motion support.
 
 ## Tech stack
 
