@@ -105,5 +105,3 @@ The automatic retry of leads that n8n missed only runs on a long-running server 
 - Email: [mrnoumannomi7@gmail.com](mailto:mrnoumannomi7@gmail.com)
 - LinkedIn: [nouman-aslam-a9a3a2333](https://www.linkedin.com/in/nouman-aslam-a9a3a2333)
 - GitHub: [CodeWithNouman99](https://github.com/CodeWithNouman99)
-
-Open to internships and junior roles.
