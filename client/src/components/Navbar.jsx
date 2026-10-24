@@ -28,12 +28,32 @@ function useSectionLink() {
   }
 }
 
+// "n." mark (same as the favicon). The home hero already shows the full name, so the name text
+// only appears next to the mark on other pages (project pages). Tooltip: "Nouman Aslam · Home".
 function Logo() {
   const goToSection = useSectionLink()
+  const { pathname } = useLocation()
+  const showName = pathname !== '/'
   return (
-    <a href="/#home" onClick={(e) => goToSection(e, 'home')} className="text-2xl font-bold tracking-tight text-ink-heading">
-      {profile.firstName.toLowerCase()}
-      <span className="text-accent">.</span>
+    <a
+      href="/#home"
+      onClick={(e) => goToSection(e, 'home')}
+      aria-label={`${profile.name} · Home`}
+      data-tip={`${profile.name} · Home`}
+      className="group flex items-center gap-2.5"
+    >
+      <span
+        aria-hidden="true"
+        className="flex h-10 w-10 items-center justify-center rounded-[11px] bg-[#111] pb-0.5 text-[22px] font-bold leading-none tracking-tight text-white transition-transform duration-200 group-hover:-rotate-6 dark:bg-white dark:text-[#111]"
+      >
+        {profile.firstName[0].toLowerCase()}
+        <span className="text-accent">.</span>
+      </span>
+      {showName && (
+        <span aria-hidden="true" className="hidden text-[16px] font-bold tracking-tight text-ink-heading sm:inline">
+          {profile.name}
+        </span>
+      )}
     </a>
   )
 }
