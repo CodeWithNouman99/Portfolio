@@ -22,30 +22,6 @@ export const defaultAskQuestions = ['What problem does it solve?', 'How does it 
 export const projects = [
   {
     id: 'P01',
-    slug: 'teammatch-ai',
-    summary: {
-      problem: 'Matching developers to a client request was done by hand: skills, free months and budget.',
-      solution: 'AI steps in n8n read the request, check who is free, score candidates and build two teams.',
-      result: 'Works end to end on sample requests: a Best Match and a Lowest Cost team in one run.',
-    },
-    title: 'TeamMatch AI',
-    short: "Multi-agent system that matches a software house's developers to client requests.",
-    category: ['Full-Stack', 'AI Automation'],
-    status: 'Completed',
-    tech: ['MERN', 'n8n', 'RAG'],
-    github: `${GITHUB}/teammatch-ai`,
-    live: null, // TODO
-    image: null,
-    featured: true,
-    overview: "Turns a request like \"2 React Native + 1 Rails developer, 6 months, $12k a month\" into two ready teams: Best Match and Lowest Cost. Built solo in 1–2 weeks.",
-    problem: undefined,
-    howItWorks: undefined,
-    challenges: "Gemini sometimes sent the JSON as plain text, so I added a Structured Output Parser. To stop double-booking, approved members are booked as tentative.",
-    results: undefined,
-    askQuestions: ['How do the agents work together?', 'How does it choose a team?', 'What was the hardest part?'],
-  },
-  {
-    id: 'P02',
     slug: 'ai-job-hunter',
     summary: {
       problem: 'Job hunting means checking several job boards every day and reading dozens of posts that never fit.',
@@ -69,77 +45,7 @@ export const projects = [
     askQuestions: ['How does it match jobs to a CV?', 'What can it do on WhatsApp?', 'Which job sources does it use?'],
   },
   {
-    id: 'P03',
-    slug: 'doctor-appointment',
-    summary: {
-      problem: 'Patients need a simple way to find a doctor and book a slot without calling the clinic.',
-      solution: 'A MERN app where patients browse doctors by speciality and book, and doctors and admins manage schedules.',
-      result: 'In progress: the patient pages are built, the backend is being built next.',
-    },
-    title: 'Doctor Appointment Booking System',
-    short: 'Patients book, doctors manage schedules, admins oversee.',
-    category: ['Full-Stack'],
-    status: 'In Progress',
-    tech: ['MERN'],
-    github: `${GITHUB}/doctor-appointment-system-mern`,
-    live: null, // TODO
-    image: null,
-    featured: false,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
-  },
-  {
-    id: 'P04',
-    slug: 'devbuddy',
-    summary: {
-      problem: 'A new developer\'s first week depends on someone being free to answer questions and assign tasks.',
-      solution: 'HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.',
-      result: 'HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.',
-    },
-    title: 'DevBuddy',
-    short: 'AI onboarding buddy for new developers at software houses.',
-    category: ['Full-Stack', 'AI Automation'],
-    status: 'Completed',
-    tech: [], // TODO: confirm tech stack
-    github: `${GITHUB}/devbuddy-portal`,
-    live: 'https://devbuddy-portal.vercel.app',
-    image: null,
-    featured: true,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
-  },
-  {
-    id: 'P05',
-    slug: 'whatsapp-bot',
-    summary: {
-      problem: 'Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.',
-      solution: 'A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.',
-      result: 'Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.',
-    },
-    title: 'WhatsApp Doctor Appointment Bot',
-    short: 'AI agent that books, reschedules and cancels appointments.',
-    category: ['AI Automation'],
-    status: 'Completed',
-    tech: ['n8n'],
-    github: `${GITHUB}/n8n-automation-projects`,
-    live: null, // TODO
-    image: null,
-    featured: true,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
-    askQuestions: ['What problem does it solve?', 'How does booking on WhatsApp work?', 'How are reminders sent?'],
-  },
-  {
-    id: 'P06',
+    id: 'P02',
     slug: 'hospital-rag',
     summary: {
       problem: 'Patients ask the same questions again and again, and the answers are buried in long PDFs.',
@@ -163,7 +69,78 @@ export const projects = [
     askQuestions: ['What problem does it solve?', 'How does it answer from PDFs?', 'What is RAG here?'],
   },
   {
-    id: 'P07',
+    id: 'P03',
+    slug: 'whatsapp-bot',
+    summary: {
+      problem: 'Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.',
+      solution: 'A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.',
+      result: 'Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.',
+    },
+    title: 'WhatsApp Doctor Appointment Bot',
+    short: 'AI agent that books, reschedules and cancels appointments.',
+    category: ['AI Automation'],
+    status: 'Completed',
+    tech: ['n8n'],
+    github: `${GITHUB}/n8n-automation-projects`,
+    live: null, // TODO
+    image: null,
+    featured: true,
+    overview: undefined, // TODO
+    problem: undefined, // TODO
+    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
+    challenges: undefined, // TODO
+    results: undefined, // TODO
+    askQuestions: ['What problem does it solve?', 'How does booking on WhatsApp work?', 'How are reminders sent?'],
+  },
+  {
+    id: 'P04',
+    slug: 'teammatch-ai',
+    summary: {
+      problem: 'Matching developers to a client request was done by hand: skills, free months and budget.',
+      solution: 'AI steps in n8n read the request, check who is free, score candidates and build two teams.',
+      result: 'Works end to end on sample requests: a Best Match and a Lowest Cost team in one run.',
+    },
+    title: 'TeamMatch AI',
+    short: "Multi-agent system that matches a software house's developers to client requests.",
+    category: ['Full-Stack', 'AI Automation'],
+    status: 'Completed',
+    tech: ['MERN', 'n8n', 'RAG'],
+    github: `${GITHUB}/teammatch-ai`,
+    live: null, // TODO
+    image: null,
+    featured: true,
+    overview: "Turns a request like \"2 React Native + 1 Rails developer, 6 months, $12k a month\" into two ready teams: Best Match and Lowest Cost. Built solo in 1–2 weeks.",
+    problem: undefined,
+    howItWorks: undefined,
+    challenges: "Gemini sometimes sent the JSON as plain text, so I added a Structured Output Parser. To stop double-booking, approved members are booked as tentative.",
+    results: undefined,
+    askQuestions: ['How do the agents work together?', 'How does it choose a team?', 'What was the hardest part?'],
+  },
+  {
+    id: 'P05',
+    slug: 'devbuddy',
+    summary: {
+      problem: 'A new developer\'s first week depends on someone being free to answer questions and assign tasks.',
+      solution: 'HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.',
+      result: 'HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.',
+    },
+    title: 'DevBuddy',
+    short: 'AI onboarding buddy for new developers at software houses.',
+    category: ['Full-Stack', 'AI Automation'],
+    status: 'Completed',
+    tech: [], // TODO: confirm tech stack
+    github: `${GITHUB}/devbuddy-portal`,
+    live: 'https://devbuddy-portal.vercel.app',
+    image: null,
+    featured: true,
+    overview: undefined, // TODO
+    problem: undefined, // TODO
+    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
+    challenges: undefined, // TODO
+    results: undefined, // TODO
+  },
+  {
+    id: 'P06',
     slug: 'client-onboarding',
     summary: {
       problem: 'Every new client meant creating folders, a Slack channel, emails and a kickoff meeting by hand.',
@@ -176,6 +153,29 @@ export const projects = [
     status: 'Completed',
     tech: ['n8n'],
     github: `${GITHUB}/n8n-automation-projects`,
+    live: null, // TODO
+    image: null,
+    featured: false,
+    overview: undefined, // TODO
+    problem: undefined, // TODO
+    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
+    challenges: undefined, // TODO
+    results: undefined, // TODO
+  },
+  {
+    id: 'P07',
+    slug: 'doctor-appointment',
+    summary: {
+      problem: 'Patients need a simple way to find a doctor and book a slot without calling the clinic.',
+      solution: 'A MERN app where patients browse doctors by speciality and book, and doctors and admins manage schedules.',
+      result: 'In progress: the patient pages are built, the backend is being built next.',
+    },
+    title: 'Doctor Appointment Booking System',
+    short: 'Patients book, doctors manage schedules, admins oversee.',
+    category: ['Full-Stack'],
+    status: 'In Progress',
+    tech: ['MERN'],
+    github: `${GITHUB}/doctor-appointment-system-mern`,
     live: null, // TODO
     image: null,
     featured: false,
