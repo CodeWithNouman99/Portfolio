@@ -129,7 +129,6 @@ function CvButtons() {
         download={profile.cv.fileName}
         onClick={guard}
         aria-label={profile.cv.download}
-        title={profile.cv.download}
         className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-ink transition-colors hover:border-accent hover:text-accent"
       >
         <Download size={16} />

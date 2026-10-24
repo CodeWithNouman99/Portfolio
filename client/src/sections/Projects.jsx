@@ -13,14 +13,14 @@ const fadeUp = {
 }
 const inView = { initial: 'hidden', whileInView: 'show', viewport: { once: true, amount: 0.2 } }
 
-function IconButton({ href, label, children }) {
+function IconButton({ href, label, tip, children }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      title={label}
+      data-tip={tip}
       onClick={(e) => e.stopPropagation()}
       className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-paper text-ink transition-colors hover:border-dark hover:bg-dark hover:text-white"
     >
@@ -98,11 +98,11 @@ const ProjectRow = forwardRef(function ProjectRow({ project, onHover, highlighte
 function RowLinks({ project }) {
   return (
     <>
-      <IconButton href={project.github} label={`${project.title} on GitHub`}>
+      <IconButton href={project.github} label={`${project.title} on GitHub`} tip="View code on GitHub">
         <GithubIcon size={14} />
       </IconButton>
       {project.live && (
-        <IconButton href={project.live} label={`${project.title} live demo`}>
+        <IconButton href={project.live} label={`${project.title} live demo`} tip="Open live demo">
           <ExternalLink size={14} />
         </IconButton>
       )}

@@ -256,7 +256,6 @@ export default function ChatWidget() {
                     onClick={speaker.toggle}
                     aria-pressed={speaker.enabled}
                     aria-label={speaker.enabled ? chat.voice.speakerOff : chat.voice.speakerOn}
-                    title={speaker.enabled ? chat.voice.speakerOff : chat.voice.speakerOn}
                     className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-surface ${
                       speaker.enabled ? 'text-accent' : 'text-grey hover:text-ink'
                     }`}
@@ -316,7 +315,6 @@ export default function ChatWidget() {
                   onClick={mic.listening ? mic.stop : mic.start}
                   aria-pressed={mic.listening}
                   aria-label={mic.listening ? chat.voice.micStop : chat.voice.micStart}
-                  title={mic.listening ? chat.voice.micStop : chat.voice.micStart}
                   className={`relative flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full border transition-colors ${
                     mic.listening
                       ? 'border-accent bg-accent text-white'
@@ -382,6 +380,7 @@ export default function ChatWidget() {
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-label={open ? 'Close chat' : chat.title}
+          data-no-tip={open ? undefined : ''}
           aria-expanded={open}
           className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-dark shadow-[0_8px_24px_rgba(0,0,0,0.2)] ring-2 ring-paper transition-transform hover:scale-105"
         >
