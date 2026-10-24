@@ -1,8 +1,7 @@
 import { useEffect, useLayoutEffect } from 'react'
 import { useLocation, useNavigationType } from 'react-router-dom'
 import { saveHomeScroll, peekHomeScroll } from '../lib/homeScroll'
-import SkillMarquee from '../components/SkillMarquee'
-import TechMarquee from '../components/TechMarquee'
+import TechStack from '../sections/TechStack'
 import Hero from '../sections/Hero'
 import About from '../sections/About'
 import Projects from '../sections/Projects'
@@ -45,8 +44,8 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <SkillMarquee />
-      <TechMarquee />
+      {/* Moving skill strips (components/SkillMarquee + TechMarquee) replaced by a still grouped stack */}
+      <TechStack />
       <About />
       <Services />
       <Projects />
