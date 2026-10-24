@@ -5,10 +5,16 @@ import { profile } from '../data/profile'
 import useFileExists from '../hooks/useFileExists'
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons'
 import WaveTexture from '../components/WaveTexture'
+import { openChat } from '../lib/openChat'
 
 // Resolves to the photo if src/assets/hero.png exists, otherwise undefined.
 const heroPhoto = Object.values(
   import.meta.glob('../assets/hero.png', { eager: true, import: 'default' }),
+)[0]
+
+// Chat avatar for the "My AI is online" row (same file the chat button uses)
+const chatAvatar = Object.values(
+  import.meta.glob('../assets/avatar.png', { eager: true, import: 'default' }),
 )[0]
 
 const { hero, links } = profile
@@ -45,6 +51,26 @@ const tagPlacement = [
   { className: `${LEFT} top-[28%]`, delay: 0.6 }, // n8n: left, upper
   { className: `${RIGHT} top-[76%]`, delay: 1.7 }, // Gemini: right, lower
 ]
+
+// Splits the intro so the words in hero.introHighlights get a soft red underline
+function highlightIntro(text, words = []) {
+  if (!words.length) return text
+  const escaped = words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  return text.split(new RegExp(`(${escaped.join('|')})`)).map((part, i) =>
+    words.includes(part) ? (
+      <span key={i} className="bg-[linear-gradient(transparent_62%,rgba(255,49,49,0.25)_62%)] font-semibold text-ink">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  )
+}
+
+// Hero "two doors": open the Projects section with a filter already applied (Projects.jsx listens)
+function openProjects(filter) {
+  window.dispatchEvent(new CustomEvent('projects:filter', { detail: filter }))
+}
 
 function scrollToContact(e) {
   e.preventDefault()
@@ -147,18 +173,27 @@ function IntroColumn() {
         {profile.lastName}
       </motion.h1>
 
-      <motion.p variants={fadeUp} className="mt-6 max-w-md text-[15px]">
-        {hero.intro}
+      <motion.p variants={fadeUp} className="mt-6 max-w-md text-[16px]">
+        {highlightIntro(hero.intro, hero.introHighlights)}
       </motion.p>
 
-      <motion.ul variants={fadeUp} className="mt-6 space-y-2.5">
-        {hero.bullets.map((item) => (
-          <li key={item} className="flex items-center gap-3 text-sm font-medium text-ink">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            {item}
-          </li>
+      <motion.div variants={fadeUp} className="mt-5 flex flex-wrap gap-2">
+        {hero.doors.map((door) => (
+          <button
+            key={door.label}
+            type="button"
+            onClick={() => openProjects(door.filter)}
+            className={`group inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${
+              door.accent
+                ? 'border-accent/40 text-accent hover:bg-accent hover:text-white'
+                : 'border-border text-ink hover:border-ink/40'
+            }`}
+          >
+            {door.label}
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </button>
         ))}
-      </motion.ul>
+      </motion.div>
 
       <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-6">
         <a
@@ -298,16 +333,29 @@ function StatsColumn() {
           ))}
         </div>
 
+        {/* "My AI is online": opens the floating chat (hidden while the hero is on screen, see ChatWidget) */}
         <div className="mt-6 flex items-center justify-between gap-4 border-t border-border pt-5">
-          <p className="text-[13px] leading-snug text-muted">{hero.statsNote}</p>
-          <a
-            href="#contact"
-            onClick={scrollToContact}
-            className="flex h-[76px] w-[76px] shrink-0 flex-col items-center justify-center gap-1 rounded-full bg-dark text-center text-[10px] font-bold uppercase leading-tight tracking-[1px] text-white transition-colors hover:bg-accent"
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="relative shrink-0">
+              {chatAvatar ? (
+                <img src={chatAvatar} alt="" className="h-11 w-11 rounded-full object-cover" />
+              ) : (
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-dark text-sm font-bold text-white">N</span>
+              )}
+              <span className="absolute bottom-0.5 right-0 h-3 w-3 rounded-full border-2 border-paper bg-[#22c55e]" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[14px] font-bold leading-tight text-ink-heading">{hero.askAi.title}</span>
+              <span className="block text-[12px] text-muted">{hero.askAi.note}</span>
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => openChat()}
+            className="inline-flex shrink-0 items-center gap-1 rounded-full border-[1.5px] border-accent px-4 py-2 text-[12px] font-bold text-accent transition-colors hover:bg-accent hover:text-white"
           >
-            Let&apos;s talk
-            <ArrowRight size={14} />
-          </a>
+            {hero.askAi.button} <ArrowRight size={13} />
+          </button>
         </div>
       </motion.div>
     </motion.div>

@@ -11,7 +11,7 @@ export const profile = {
     degree: 'BS Software Engineering',
     institution: 'University of Agriculture Faisalabad',
     period: '2023 – present',
-    cgpa: '3.52/4.0',
+    cgpa: '3.51/4.0',
   },
 
   stack: [
@@ -41,7 +41,7 @@ export const profile = {
   stats: [
     { value: '3', label: 'WEB APPS BUILT' },
     { value: '5+', label: 'n8n AUTOMATIONS' },
-    { value: '3.52', label: 'CGPA / 4.0' },
+    { value: '3.51', label: 'CGPA / 4.0' },
   ],
 
   // Hero CV buttons. They always show; until client/public/cv.pdf exists, clicking them shows `missing`
@@ -58,17 +58,19 @@ export const profile = {
 
   hero: {
     kicker: 'Hy! I am',
-    intro:
-      'I build full-stack MERN apps and the AI automations that run behind them. Code that ships, not just compiles.',
-    bullets: [
-      'MERN Stack Developer',
-      'AI Automation Builder @ n8n',
-      'Software Engineering @ UAF',
-      'Open to Internships & Junior Roles',
+    intro: "I ship what's worth building and automate what keeps repeating.",
+    // Words in `intro` that get a soft red underline highlight
+    introHighlights: ['worth building', 'keeps repeating'],
+    // Two small buttons under the intro: each scrolls to Projects with that filter on
+    doors: [
+      { label: 'AI automations', filter: 'AI Automation', accent: true },
+      { label: 'Web apps', filter: 'Full-Stack' },
     ],
     // Shown exactly as written (no CSS uppercasing), so "n8n" keeps its lowercase like in the stats
     floatingTags: ['MERN DEVELOPER', 'AI AUTOMATION', 'n8n BUILDER', 'PROBLEM SOLVER'],
     statsNote: 'Based in Faisalabad, Pakistan',
+    // Bottom of the IMPACT card: opens the AI chat
+    askAi: { title: 'My AI is online', note: 'Ask it about my projects', button: 'Ask' },
   },
 
   // TODO: cartoon avatar for the AI chat widget → src/assets

@@ -120,6 +120,35 @@ export default function ChatWidget() {
   // Project the conversation is scoped to (set by "Ask AI about this project"); cleared when leaving its page
   const [scope, setScope] = useState(null)
   const { pathname } = useLocation()
+
+  // On the home page the hero card has its own "Ask" button, so the floating launcher (and the theme
+  // button above it) stays hidden until the hero is mostly scrolled past. Prevents two chat buttons at once.
+  const [heroOnScreen, setHeroOnScreen] = useState(false)
+  useEffect(() => {
+    if (pathname !== '/') {
+      setHeroOnScreen(false)
+      return
+    }
+    let frame = 0
+    const check = () => {
+      frame = 0
+      const hero = document.getElementById('home')
+      setHeroOnScreen(Boolean(hero) && hero.getBoundingClientRect().bottom > window.innerHeight * 0.5)
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(check)
+    }
+    const timer = setTimeout(check, 0)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      clearTimeout(timer)
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [pathname])
+  const launcherHidden = heroOnScreen && !open
   const scrollRef = useRef(null)
   const inputRef = useRef(null)
   const navigate = useNavigate()
@@ -312,7 +341,12 @@ export default function ChatWidget() {
         )}
       </AnimatePresence>
 
-      <div className="fixed bottom-5 right-5 z-[55] flex items-center gap-3">
+      <div
+        aria-hidden={launcherHidden || undefined}
+        className={`fixed bottom-5 right-5 z-[55] flex items-center gap-3 transition-all duration-300 ${
+          launcherHidden ? 'pointer-events-none translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
+        }`}
+      >
         {/* Theme button: centred above the avatar, hidden while the chat panel is open */}
         <AnimatePresence>
           {!open && (

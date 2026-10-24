@@ -186,6 +186,17 @@ export default function Projects() {
     }
   }, [])
 
+  // Hero "two doors" buttons: switch the filter and scroll here
+  useEffect(() => {
+    const onFilter = (e) => {
+      if (projectFilters.includes(e.detail)) setFilter(e.detail)
+      // Wait for the filtered list to settle first: a smooth scroll stops early if the page height changes mid-way
+      setTimeout(() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }), 400)
+    }
+    window.addEventListener('projects:filter', onFilter)
+    return () => window.removeEventListener('projects:filter', onFilter)
+  }, [])
+
   const visible = filter === 'All' ? projects : projects.filter((p) => p.category.includes(filter))
 
   return (
