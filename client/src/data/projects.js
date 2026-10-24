@@ -46,6 +46,30 @@ export const projects = [
   },
   {
     id: 'P02',
+    slug: 'ai-job-hunter',
+    summary: {
+      problem: 'Job hunting means checking several job boards every day and reading dozens of posts that never fit.',
+      solution: 'Six n8n workflows collect jobs daily, score each one against my CV with RAG and write cover letters.',
+      result: 'All six workflows (WF0–WF5) are done; top jobs, cover letters and applications are managed from WhatsApp.',
+    },
+    title: 'AI Job Hunter',
+    short: 'Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.',
+    category: ['AI Automation'],
+    status: 'Completed',
+    tech: ['n8n', 'Gemini', 'Supabase', 'RAG'],
+    github: `${GITHUB}/n8n-automation-projects/tree/main/ai-job-hunter`,
+    live: null, // pure automation, no website
+    image: null,
+    featured: true,
+    overview: 'An AI job assistant that runs on WhatsApp. Every day it pulls jobs from Remotive, RemoteOK and JSearch, scores each one 0–100 against my CV and writes cover letters for the strong matches.',
+    problem: undefined,
+    howItWorks: undefined,
+    challenges: undefined, // TODO
+    results: undefined, // TODO
+    askQuestions: ['How does it match jobs to a CV?', 'What can it do on WhatsApp?', 'Which job sources does it use?'],
+  },
+  {
+    id: 'P03',
     slug: 'doctor-appointment',
     summary: {
       problem: 'Patients need a simple way to find a doctor and book a slot without calling the clinic.',
@@ -68,7 +92,7 @@ export const projects = [
     results: undefined, // TODO
   },
   {
-    id: 'P03',
+    id: 'P04',
     slug: 'devbuddy',
     summary: {
       problem: 'A new developer\'s first week depends on someone being free to answer questions and assign tasks.',
@@ -91,7 +115,7 @@ export const projects = [
     results: undefined, // TODO
   },
   {
-    id: 'P04',
+    id: 'P05',
     slug: 'whatsapp-bot',
     summary: {
       problem: 'Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.',
@@ -115,7 +139,7 @@ export const projects = [
     askQuestions: ['What problem does it solve?', 'How does booking on WhatsApp work?', 'How are reminders sent?'],
   },
   {
-    id: 'P05',
+    id: 'P06',
     slug: 'hospital-rag',
     summary: {
       problem: 'Patients ask the same questions again and again, and the answers are buried in long PDFs.',
@@ -139,7 +163,7 @@ export const projects = [
     askQuestions: ['What problem does it solve?', 'How does it answer from PDFs?', 'What is RAG here?'],
   },
   {
-    id: 'P06',
+    id: 'P07',
     slug: 'client-onboarding',
     summary: {
       problem: 'Every new client meant creating folders, a Slack channel, emails and a kickoff meeting by hand.',
@@ -162,7 +186,7 @@ export const projects = [
     results: undefined, // TODO
   },
   {
-    id: 'P07',
+    id: 'P08',
     slug: 'hirehub',
     summary: {
       problem: 'Job seekers need one place to browse openings, and employers a quick way to post them.',
@@ -185,7 +209,7 @@ export const projects = [
     results: undefined, // TODO
   },
   {
-    id: 'P08',
+    id: 'P09',
     slug: 'cartify',
     summary: {
       problem: 'A shop front has to let people browse products and build a cart smoothly on any screen.',

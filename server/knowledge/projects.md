@@ -36,7 +36,39 @@ Fields not listed for a project are not written yet, so they are not known.
     - MongoDB (MongoDB): Stores the requests and the team options.
     - React dashboard (approve a team) (React): A person picks a team; its members are booked as tentative.
 
-### Doctor Appointment Booking System · P02 · page /projects/doctor-appointment
+### AI Job Hunter · P02 · page /projects/ai-job-hunter
+- Description: Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.
+- Category: AI Automation. Status: Completed.
+- Tech: n8n, Gemini, Supabase, RAG.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects/tree/main/ai-job-hunter
+- Live demo: none yet.
+- Problem (summary card): Job hunting means checking several job boards every day and reading dozens of posts that never fit.
+- Solution (summary card): Six n8n workflows collect jobs daily, score each one against my CV with RAG and write cover letters.
+- Result (summary card): All six workflows (WF0–WF5) are done; top jobs, cover letters and applications are managed from WhatsApp.
+- Overview: An AI job assistant that runs on WhatsApp. Every day it pulls jobs from Remotive, RemoteOK and JSearch, scores each one 0–100 against my CV and writes cover letters for the strong matches.
+- Architecture (the "How it works" diagram on the page):
+  - Note: If a workflow fails, WF5 Error Guard sends me a WhatsApp alert with the node and the error.
+  - CV PDF (upload form) → WF0 CV Brain
+  - WF0 CV Brain → Supabase (pgvector)
+  - Remotive, RemoteOK, JSearch → WF1 Job Collector (daily 9 AM)
+  - WF1 Job Collector (daily 9 AM) → WF2 Job Matcher (RAG)
+  - WF2 Job Matcher (RAG) uses the tool Supabase (pgvector)
+  - WF2 Job Matcher (RAG) → WF3 Cover Letter Writer (daily 10 AM)
+  - WF3 Cover Letter Writer (daily 10 AM) uses the tool Supabase (pgvector)
+  - WhatsApp: jobs · letter · applied → WF4 WhatsApp Assistant
+  - WF4 WhatsApp Assistant uses the tool Supabase (pgvector)
+  - What each step does:
+    - CV PDF (upload form) (Input): I upload my CV once through a form.
+    - WF0 CV Brain (Gemini): Splits the CV into chunks and turns them into Gemini embeddings.
+    - Supabase (pgvector) (Supabase): Stores CV chunks, jobs, match scores, cover letters and applications.
+    - Remotive, RemoteOK, JSearch (Job APIs): Remote jobs and Pakistan jobs from public job APIs.
+    - WF1 Job Collector (daily 9 AM) (n8n): Fetches new jobs, puts them in one shape and skips duplicates.
+    - WF2 Job Matcher (RAG) (AI step): Finds the matching parts of my CV and scores each job 0–100 with Gemini.
+    - WF3 Cover Letter Writer (daily 10 AM) (AI step): Writes a 150–220 word letter for jobs scoring 70+, using only real CV facts.
+    - WhatsApp: jobs · letter · applied (WhatsApp): I message the assistant from my own number.
+    - WF4 WhatsApp Assistant (AI agent): Shows my top jobs, sends a cover letter or marks a job as applied.
+
+### Doctor Appointment Booking System · P03 · page /projects/doctor-appointment
 - Description: Patients book, doctors manage schedules, admins oversee.
 - Category: Full-Stack. Status: In Progress.
 - Tech: MERN.
@@ -56,7 +88,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Express API (Express): REST endpoints for doctors and bookings (in progress).
     - MongoDB (MongoDB): Stores doctors, patients and appointments.
 
-### DevBuddy · P03 · page /projects/devbuddy
+### DevBuddy · P04 · page /projects/devbuddy
 - Description: AI onboarding buddy for new developers at software houses.
 - Category: Full-Stack, AI Automation. Status: Completed.
 - Code: https://github.com/CodeWithNouman99/devbuddy-portal
@@ -85,7 +117,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - WhatsApp reply (WhatsApp): Sends the buddy's answer back.
     - Manager dashboard (React): The manager sees each new developer’s progress.
 
-### WhatsApp Doctor Appointment Bot · P04 · page /projects/whatsapp-bot
+### WhatsApp Doctor Appointment Bot · P05 · page /projects/whatsapp-bot
 - Description: AI agent that books, reschedules and cancels appointments.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n.
@@ -116,7 +148,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Stripe Trigger (Stripe): Starts when a payment comes in.
     - Payment confirmation on WhatsApp (WhatsApp): Confirms the payment to the patient.
 
-### Hospital RAG Agent · P05 · page /projects/hospital-rag
+### Hospital RAG Agent · P06 · page /projects/hospital-rag
 - Description: Answers hospital questions from a knowledge-base PDF.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n, Vector DB.
@@ -142,7 +174,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Hospital Data (Pinecone search) (Tool): Finds the most relevant parts of the documents.
     - Answer from the hospital's documents (Output): The reply is based on what the PDFs say.
 
-### Client Onboarding Automation · P06 · page /projects/client-onboarding
+### Client Onboarding Automation · P07 · page /projects/client-onboarding
 - Category: AI Automation. Status: Completed.
 - Tech: n8n.
 - Code: https://github.com/CodeWithNouman99/n8n-automation-projects
@@ -168,7 +200,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Welcome email (Gmail): Sends the client a welcome email.
     - Kickoff meeting (Calendar): Books the kickoff meeting in Google Calendar.
 
-### HireHub · P07 · page /projects/hirehub
+### HireHub · P08 · page /projects/hirehub
 - Description: Job portal with Clerk auth.
 - Category: Frontend. Status: Completed.
 - Tech: React, Tailwind, React Router, Clerk.
@@ -189,7 +221,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Job listings (Page): Visitors browse open jobs.
     - Post a job (Page): Employers add a new job listing.
 
-### Cartify · P08 · page /projects/cartify
+### Cartify · P09 · page /projects/cartify
 - Description: E-commerce frontend.
 - Category: Frontend. Status: Completed.
 - Tech: React.

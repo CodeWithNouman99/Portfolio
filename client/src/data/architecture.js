@@ -42,6 +42,33 @@ export const architecture = {
     mainPath: ['request', 'dashboard', 'api', 'n8n', 'read', 'free', 'score', 'options', 'db', 'approve'],
   },
 
+  'ai-job-hunter': {
+    note: 'If a workflow fails, WF5 Error Guard sends me a WhatsApp alert with the node and the error.',
+    nodes: [
+      { id: 'cv', label: 'CV PDF (upload form)', tag: 'Input', x: 8, y: 16, note: 'I upload my CV once through a form.' },
+      { id: 'wf0', label: 'WF0 CV Brain', tag: 'Gemini', x: 30, y: 16, ai: true, note: 'Splits the CV into chunks and turns them into Gemini embeddings.' },
+      { id: 'db', label: 'Supabase (pgvector)', tag: 'Supabase', x: 56, y: 16, note: 'Stores CV chunks, jobs, match scores, cover letters and applications.' },
+      { id: 'sources', label: 'Remotive, RemoteOK, JSearch', tag: 'Job APIs', x: 8, y: 50, note: 'Remote jobs and Pakistan jobs from public job APIs.' },
+      { id: 'wf1', label: 'WF1 Job Collector (daily 9 AM)', tag: 'n8n', x: 30, y: 50, note: 'Fetches new jobs, puts them in one shape and skips duplicates.' },
+      { id: 'wf2', label: 'WF2 Job Matcher (RAG)', tag: 'AI step', x: 56, y: 50, ai: true, note: 'Finds the matching parts of my CV and scores each job 0–100 with Gemini.' },
+      { id: 'wf3', label: 'WF3 Cover Letter Writer (daily 10 AM)', tag: 'AI step', x: 84, y: 50, ai: true, note: 'Writes a 150–220 word letter for jobs scoring 70+, using only real CV facts.' },
+      { id: 'wa', label: 'WhatsApp: jobs · letter · applied', tag: 'WhatsApp', x: 8, y: 84, note: 'I message the assistant from my own number.' },
+      { id: 'wf4', label: 'WF4 WhatsApp Assistant', tag: 'AI agent', x: 30, y: 84, ai: true, note: 'Shows my top jobs, sends a cover letter or marks a job as applied.' },
+    ],
+    edges: [
+      ['cv', 'wf0'],
+      ['wf0', 'db'],
+      ['sources', 'wf1'],
+      ['wf1', 'wf2'],
+      ['wf2', 'db', 'tool'],
+      ['wf2', 'wf3'],
+      ['wf3', 'db', 'tool'],
+      ['wa', 'wf4'],
+      ['wf4', 'db', 'tool'],
+    ],
+    mainPath: ['sources', 'wf1', 'wf2', 'wf3'],
+  },
+
   'whatsapp-bot': {
     nodes: [
       { id: 'trigger', label: 'WhatsApp Trigger', tag: 'WhatsApp', x: 8, y: 16, note: 'Starts the flow when a patient sends a message.' },
