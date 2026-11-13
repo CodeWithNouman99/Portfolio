@@ -18,6 +18,7 @@ export const defaultAskQuestions = ['What problem does it solve?', 'How does it 
 //   results:    string           → "Results" (real outcomes only)
 //   summary:    { problem, solution, result } → three small cards under the header
 //   askQuestions: string[]       → suggested chips in the "Ask AI about this project" box
+// featured: true shows a small "Featured" badge next to the title in the projects list
 // TODO: live URLs and screenshots for the remaining projects
 export const projects = [
   {
@@ -36,7 +37,7 @@ export const projects = [
     github: `${GITHUB}/teammatch-ai`,
     live: null, // TODO
     image: null,
-    featured: true,
+    featured: false,
     overview: "Turns a request like \"2 React Native + 1 Rails developer, 6 months, $12k a month\" into two ready teams: Best Match and Lowest Cost. Built solo in 1–2 weeks.",
     problem: undefined,
     howItWorks: undefined,
@@ -79,7 +80,7 @@ export const projects = [
     short: 'AI onboarding buddy for new developers at software houses.',
     category: ['Full-Stack', 'AI Automation'],
     status: 'Completed',
-    tech: [], // TODO: confirm tech stack
+    tech: ['n8n', 'React', 'Webhooks', 'Google Sheets', 'AI Agent'],
     github: `${GITHUB}/devbuddy-portal`,
     live: 'https://devbuddy-portal.vercel.app',
     image: null,
@@ -106,7 +107,7 @@ export const projects = [
     github: `${GITHUB}/n8n-automation-projects`,
     live: null, // TODO
     image: null,
-    featured: true,
+    featured: false,
     overview: undefined, // TODO
     problem: undefined, // TODO
     howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
@@ -130,7 +131,7 @@ export const projects = [
     github: `${GITHUB}/n8n-automation-projects`,
     live: null, // TODO
     image: null,
-    featured: true,
+    featured: false,
     overview: undefined, // TODO
     problem: undefined, // TODO
     howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
@@ -147,7 +148,7 @@ export const projects = [
       result: 'One form submission sets up the whole client workspace for Web, Mobile or Automation projects.',
     },
     title: 'Client Onboarding Automation',
-    short: '', // TODO: one-line description
+    short: 'Placeholder: one-line description coming soon.', // TODO: replace with the real one-line description
     category: ['AI Automation'],
     status: 'Completed',
     tech: ['n8n'],

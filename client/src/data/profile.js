@@ -57,7 +57,7 @@ export const profile = {
   // TODO: hero cut-out photo — drop a transparent PNG at src/assets/hero.png (picked up automatically)
 
   hero: {
-    kicker: 'Hy! I am',
+    kicker: 'Hey! I am',
     intro:
       'I build full-stack MERN apps and the AI automations that run behind them. Code that ships, not just compiles.',
     bullets: [
@@ -67,7 +67,7 @@ export const profile = {
       'Open to Internships & Junior Roles',
     ],
     // Shown exactly as written (no CSS uppercasing), so "n8n" keeps its lowercase like in the stats
-    floatingTags: ['MERN DEVELOPER', 'AI AUTOMATION', 'n8n BUILDER', 'PROBLEM SOLVER'],
+    floatingTags: ['AI AUTOMATION', 'n8n BUILDER', 'MERN DEVELOPER', 'PROBLEM SOLVER'],
     statsNote: 'Based in Faisalabad, Pakistan',
   },
 

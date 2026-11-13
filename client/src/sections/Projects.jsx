@@ -58,6 +58,11 @@ const ProjectRow = forwardRef(function ProjectRow({ project, onHover, highlighte
           <Link to={`/projects/${project.slug}`} onClick={(e) => e.stopPropagation()}>
             {project.title}
           </Link>
+          {project.featured && (
+            <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-[1px] text-white">
+              Featured
+            </span>
+          )}
           <ArrowRight
             size={16}
             className="shrink-0 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
