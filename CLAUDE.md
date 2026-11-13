@@ -33,7 +33,7 @@ Read this file fully before every task. It is the single source of truth for des
 
 Type scale:
 - Eyebrow label: 12px, weight 700, letter-spacing 2.4px, UPPERCASE, accent red (e.g. "ABOUT ME").
-- Hero kicker "HY! I AM": 14px, 700, letter-spacing 2.5px, muted.
+- Hero kicker "HEY! I AM": 14px, 700, letter-spacing 2.5px, muted.
 - Hero name: ~72–96px desktop (48px mobile), weight 800, letter-spacing -0.03em, line-height 1.05, two lines (first / last name).
 - Section H2: 32px mobile → 56px desktop, weight 700.
 - Body: 14–16px, line-height 1.8, secondary colour.
@@ -49,7 +49,7 @@ Signature effects:
 ## Page structure (single page, in this order)
 1. **Navbar** — logo `nouman.` (the dot in accent red) on left; centered pill nav (light grey `#F5F5F5` rounded-full, items: Home, Services, Projects, Certifications, Contact; active item text red); right: LinkedIn + GitHub icon links. Sticky, white with slight blur, bottom border on scroll. Mobile: hamburger → full-screen menu.
 2. **Hero** — 3 columns on desktop:
-   - Left: "HY! I AM" kicker, two-line name "Nouman / Aslam", tagline, 4 red-dot bullets, buttons: red "Get In Touch ↗" + text "Download CV ↗", "Find me on:" with round icon buttons (mail, LinkedIn, GitHub).
+   - Left: "HEY! I AM" kicker, two-line name "Nouman / Aslam", tagline, 4 red-dot bullets, buttons: red "Get In Touch ↗" + text "Download CV ↗", "Find me on:" with round icon buttons (mail, LinkedIn, GitHub).
    - Center: Nouman's cut-out photo standing in front of a big **red arch** (semi-circle top), with 4 small black floating pill tags around it (slow float animation).
    - Right: white "stats card" (border, small shadow) with eyebrow "IMPACT", 3 stats in a row, one line under it, and a round black "LET'S TALK →" button; below it a short paragraph.
    - Watermark "NOUMAN" behind everything; wave texture at bottom.

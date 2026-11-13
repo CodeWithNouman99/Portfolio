@@ -4,8 +4,8 @@
 const ANSWERS = {
   'what has he built': {
     reply:
-      "Nouman has built 8 projects, from full-stack MERN apps to AI automations. His flagship work is **TeamMatch AI**, a multi-agent system that matches a software house's developers to client requests, alongside DevBuddy, an AI onboarding buddy for new developers. He has also built n8n agents such as a WhatsApp doctor appointment bot and a hospital RAG agent.",
-    projects: ['P01', 'P03'],
+      "Nouman has built 8 projects, from full-stack MERN apps to AI automations. His flagship work is **DevBuddy**, an AI onboarding buddy for new developers, alongside **TeamMatch AI**, a multi-agent system that matches a software house's developers to client requests. He has also built n8n agents such as a WhatsApp doctor appointment bot and a hospital RAG agent.",
+    projects: ['P01', 'P02'],
   },
   'is he open to internships': {
     reply:

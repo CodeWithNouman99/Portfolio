@@ -1,96 +1,37 @@
 ## Project page details (generated from the portfolio's project data; do not edit by hand)
 Fields not listed for a project are not written yet, so they are not known.
 
-### AI Job Hunter · P01 · page /projects/ai-job-hunter
-- Description: Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.
-- Category: AI Automation. Status: Completed.
-- Tech: n8n, Gemini, Supabase, RAG.
-- Code: https://github.com/CodeWithNouman99/n8n-automation-projects/tree/main/ai-job-hunter
-- Live demo: none yet.
-- Problem (summary card): Job hunting means checking several job boards every day and reading dozens of posts that never fit.
-- Solution (summary card): Six n8n workflows collect jobs daily, score each one against my CV with RAG and write cover letters.
-- Result (summary card): All six workflows (WF0–WF5) are done; top jobs, cover letters and applications are managed from WhatsApp.
-- Overview: An AI job assistant that runs on WhatsApp. Every day it pulls jobs from Remotive, RemoteOK and JSearch, scores each one 0–100 against my CV and writes cover letters for the strong matches.
+### DevBuddy · P01 · page /projects/devbuddy
+- Description: AI onboarding buddy for new developers at software houses.
+- Category: Full-Stack, AI Automation. Status: Completed.
+- Tech: n8n, React, Webhooks, Google Sheets, AI Agent.
+- Code: https://github.com/CodeWithNouman99/devbuddy-portal
+- Live demo: https://devbuddy-portal.vercel.app
+- Problem (summary card): A new developer's first week depends on someone being free to answer questions and assign tasks.
+- Solution (summary card): HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.
+- Result (summary card): HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.
 - Architecture (the "How it works" diagram on the page):
-  - Note: If a workflow fails, WF5 Error Guard sends me a WhatsApp alert with the node and the error.
-  - CV PDF (upload form) → WF0 CV Brain
-  - WF0 CV Brain → Supabase (pgvector)
-  - Remotive, RemoteOK, JSearch → WF1 Job Collector (daily 9 AM)
-  - WF1 Job Collector (daily 9 AM) → WF2 Job Matcher (RAG)
-  - WF2 Job Matcher (RAG) uses the tool Supabase (pgvector)
-  - WF2 Job Matcher (RAG) → WF3 Cover Letter Writer (daily 10 AM)
-  - WF3 Cover Letter Writer (daily 10 AM) uses the tool Supabase (pgvector)
-  - WhatsApp: jobs · letter · applied → WF4 WhatsApp Assistant
-  - WF4 WhatsApp Assistant uses the tool Supabase (pgvector)
+  - Note: A separate daily flow sends each developer their next task and alerts the manager.
+  - HR portal (React) → n8n Webhook
+  - n8n Webhook → Google Sheets: developers & progress
+  - Google Sheets: developers & progress → WhatsApp welcome
+  - WhatsApp message → AI Buddy (Gemini)
+  - AI Buddy (Gemini) uses the tool Company docs
+  - AI Buddy (Gemini) uses the tool Google Sheets: developers & progress
+  - AI Buddy (Gemini) → WhatsApp reply
+  - Google Sheets: developers & progress → Manager dashboard
   - What each step does:
-    - CV PDF (upload form) (Input): I upload my CV once through a form.
-    - WF0 CV Brain (Gemini): Splits the CV into chunks and turns them into Gemini embeddings.
-    - Supabase (pgvector) (Supabase): Stores CV chunks, jobs, match scores, cover letters and applications.
-    - Remotive, RemoteOK, JSearch (Job APIs): Remote jobs and Pakistan jobs from public job APIs.
-    - WF1 Job Collector (daily 9 AM) (n8n): Fetches new jobs, puts them in one shape and skips duplicates.
-    - WF2 Job Matcher (RAG) (AI step): Finds the matching parts of my CV and scores each job 0–100 with Gemini.
-    - WF3 Cover Letter Writer (daily 10 AM) (AI step): Writes a 150–220 word letter for jobs scoring 70+, using only real CV facts.
-    - WhatsApp: jobs · letter · applied (WhatsApp): I message the assistant from my own number.
-    - WF4 WhatsApp Assistant (AI agent): Shows my top jobs, sends a cover letter or marks a job as applied.
+    - HR portal (React) (React): HR adds a new developer with a short form.
+    - n8n Webhook (n8n): Receives the new developer from the portal.
+    - Google Sheets: developers & progress (Google Sheets): Keeps each developer and the tasks they have finished.
+    - WhatsApp welcome (WhatsApp): The new developer gets a welcome message on day one.
+    - WhatsApp message (WhatsApp): The developer asks a question or says a task is done.
+    - AI Buddy (Gemini) (AI agent): Answers from company docs, logs questions and marks tasks done.
+    - Company docs (Tool): The onboarding documents the buddy answers from.
+    - WhatsApp reply (WhatsApp): Sends the buddy's answer back.
+    - Manager dashboard (React): The manager sees each new developer’s progress.
 
-### Hospital RAG Agent · P02 · page /projects/hospital-rag
-- Description: Answers hospital questions from a knowledge-base PDF.
-- Category: AI Automation. Status: Completed.
-- Tech: n8n, Vector DB.
-- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
-- Live demo: none yet.
-- Problem (summary card): Patients ask the same questions again and again, and the answers are buried in long PDFs.
-- Solution (summary card): New PDFs in Google Drive are embedded into Pinecone, and an AI agent answers questions from them.
-- Result (summary card): Answers come from the hospital's own documents; adding a PDF updates what it knows.
-- Architecture (the "How it works" diagram on the page):
-  - Google Drive Trigger (new PDF) → Download file
-  - Download file → Gemini embeddings
-  - Gemini embeddings → Pinecone vector store
-  - Chat message → AI Agent (Gemini + memory)
-  - AI Agent (Gemini + memory) → Hospital Data (Pinecone search)
-  - Hospital Data (Pinecone search) → Answer from the hospital's documents
-  - What each step does:
-    - Google Drive Trigger (new PDF) (Google Drive): Starts when a new PDF is added to the folder.
-    - Download file (n8n): Fetches the PDF so it can be processed.
-    - Gemini embeddings (Gemini): Turns the document text into vectors.
-    - Pinecone vector store (Pinecone): Keeps the vectors so they can be searched.
-    - Chat message (n8n): A question comes in from the chat.
-    - AI Agent (Gemini + memory) (AI agent): Decides what to look up and writes the answer.
-    - Hospital Data (Pinecone search) (Tool): Finds the most relevant parts of the documents.
-    - Answer from the hospital's documents (Output): The reply is based on what the PDFs say.
-
-### WhatsApp Doctor Appointment Bot · P03 · page /projects/whatsapp-bot
-- Description: AI agent that books, reschedules and cancels appointments.
-- Category: AI Automation. Status: Completed.
-- Tech: n8n.
-- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
-- Live demo: none yet.
-- Problem (summary card): Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.
-- Solution (summary card): A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.
-- Result (summary card): Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.
-- Architecture (the "How it works" diagram on the page):
-  - WhatsApp Trigger → Filter
-  - Filter → AI Agent (Gemini + memory)
-  - AI Agent (Gemini + memory) uses the tool Google Sheets: doctors, patients, appointments
-  - AI Agent (Gemini + memory) uses the tool Date & Time
-  - AI Agent (Gemini + memory) → WhatsApp reply
-  - Schedule Trigger → Reminder AI Agent
-  - Reminder AI Agent → WhatsApp reminder
-  - Stripe Trigger → Payment confirmation on WhatsApp
-  - What each step does:
-    - WhatsApp Trigger (WhatsApp): Starts the flow when a patient sends a message.
-    - Filter (n8n): Passes on only the messages the bot should handle.
-    - AI Agent (Gemini + memory) (AI agent): Understands the message and books, reschedules or cancels.
-    - WhatsApp reply (WhatsApp): Sends the agent's answer back to the patient.
-    - Google Sheets: doctors, patients, appointments (Tool): The data the agent reads and updates.
-    - Date & Time (Tool): Gives the agent the current date and time.
-    - Schedule Trigger (n8n): Runs the reminder flow on a schedule.
-    - Reminder AI Agent (AI agent): Writes the reminder for upcoming appointments.
-    - WhatsApp reminder (WhatsApp): Delivers the reminder to the patient.
-    - Stripe Trigger (Stripe): Starts when a payment comes in.
-    - Payment confirmation on WhatsApp (WhatsApp): Confirms the payment to the patient.
-
-### TeamMatch AI · P04 · page /projects/teammatch-ai
+### TeamMatch AI · P02 · page /projects/teammatch-ai
 - Description: Multi-agent system that matches a software house's developers to client requests.
 - Category: Full-Stack, AI Automation. Status: Completed.
 - Tech: MERN, n8n, RAG.
@@ -125,36 +66,71 @@ Fields not listed for a project are not written yet, so they are not known.
     - MongoDB (MongoDB): Stores the requests and the team options.
     - React dashboard (approve a team) (React): A person picks a team; its members are booked as tentative.
 
-### DevBuddy · P05 · page /projects/devbuddy
-- Description: AI onboarding buddy for new developers at software houses.
-- Category: Full-Stack, AI Automation. Status: Completed.
-- Code: https://github.com/CodeWithNouman99/devbuddy-portal
-- Live demo: https://devbuddy-portal.vercel.app
-- Problem (summary card): A new developer's first week depends on someone being free to answer questions and assign tasks.
-- Solution (summary card): HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.
-- Result (summary card): HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.
+### AI Job Hunter · P03 · page /projects/ai-job-hunter
+- Description: Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.
+- Category: AI Automation. Status: Completed.
+- Tech: n8n, Gemini, Supabase, RAG.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects/tree/main/ai-job-hunter
+- Live demo: none yet.
+- Problem (summary card): Job hunting means checking several job boards every day and reading dozens of posts that never fit.
+- Solution (summary card): Six n8n workflows collect jobs daily, score each one against my CV with RAG and write cover letters.
+- Result (summary card): All six workflows (WF0–WF5) are done; top jobs, cover letters and applications are managed from WhatsApp.
+- Overview: An AI job assistant that runs on WhatsApp. Every day it pulls jobs from Remotive, RemoteOK and JSearch, scores each one 0–100 against my CV and writes cover letters for the strong matches.
 - Architecture (the "How it works" diagram on the page):
-  - Note: A separate daily flow sends each developer their next task and alerts the manager.
-  - HR portal (React) → n8n Webhook
-  - n8n Webhook → Google Sheets: developers & progress
-  - Google Sheets: developers & progress → WhatsApp welcome
-  - WhatsApp message → AI Buddy (Gemini)
-  - AI Buddy (Gemini) uses the tool Company docs
-  - AI Buddy (Gemini) uses the tool Google Sheets: developers & progress
-  - AI Buddy (Gemini) → WhatsApp reply
-  - Google Sheets: developers & progress → Manager dashboard
+  - Note: If a workflow fails, WF5 Error Guard sends me a WhatsApp alert with the node and the error.
+  - CV PDF (upload form) → WF0 CV Brain
+  - WF0 CV Brain → Supabase (pgvector)
+  - Remotive, RemoteOK, JSearch → WF1 Job Collector (daily 9 AM)
+  - WF1 Job Collector (daily 9 AM) → WF2 Job Matcher (RAG)
+  - WF2 Job Matcher (RAG) uses the tool Supabase (pgvector)
+  - WF2 Job Matcher (RAG) → WF3 Cover Letter Writer (daily 10 AM)
+  - WF3 Cover Letter Writer (daily 10 AM) uses the tool Supabase (pgvector)
+  - WhatsApp: jobs · letter · applied → WF4 WhatsApp Assistant
+  - WF4 WhatsApp Assistant uses the tool Supabase (pgvector)
   - What each step does:
-    - HR portal (React) (React): HR adds a new developer with a short form.
-    - n8n Webhook (n8n): Receives the new developer from the portal.
-    - Google Sheets: developers & progress (Google Sheets): Keeps each developer and the tasks they have finished.
-    - WhatsApp welcome (WhatsApp): The new developer gets a welcome message on day one.
-    - WhatsApp message (WhatsApp): The developer asks a question or says a task is done.
-    - AI Buddy (Gemini) (AI agent): Answers from company docs, logs questions and marks tasks done.
-    - Company docs (Tool): The onboarding documents the buddy answers from.
-    - WhatsApp reply (WhatsApp): Sends the buddy's answer back.
-    - Manager dashboard (React): The manager sees each new developer’s progress.
+    - CV PDF (upload form) (Input): I upload my CV once through a form.
+    - WF0 CV Brain (Gemini): Splits the CV into chunks and turns them into Gemini embeddings.
+    - Supabase (pgvector) (Supabase): Stores CV chunks, jobs, match scores, cover letters and applications.
+    - Remotive, RemoteOK, JSearch (Job APIs): Remote jobs and Pakistan jobs from public job APIs.
+    - WF1 Job Collector (daily 9 AM) (n8n): Fetches new jobs, puts them in one shape and skips duplicates.
+    - WF2 Job Matcher (RAG) (AI step): Finds the matching parts of my CV and scores each job 0–100 with Gemini.
+    - WF3 Cover Letter Writer (daily 10 AM) (AI step): Writes a 150–220 word letter for jobs scoring 70+, using only real CV facts.
+    - WhatsApp: jobs · letter · applied (WhatsApp): I message the assistant from my own number.
+    - WF4 WhatsApp Assistant (AI agent): Shows my top jobs, sends a cover letter or marks a job as applied.
 
-### Client Onboarding Automation · P06 · page /projects/client-onboarding
+### WhatsApp Doctor Appointment Bot · P04 · page /projects/whatsapp-bot
+- Description: AI agent that books, reschedules and cancels appointments.
+- Category: AI Automation. Status: Completed.
+- Tech: n8n.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
+- Live demo: none yet.
+- Problem (summary card): Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.
+- Solution (summary card): A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.
+- Result (summary card): Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.
+- Architecture (the "How it works" diagram on the page):
+  - WhatsApp Trigger → Filter
+  - Filter → AI Agent (Gemini + memory)
+  - AI Agent (Gemini + memory) uses the tool Google Sheets: doctors, patients, appointments
+  - AI Agent (Gemini + memory) uses the tool Date & Time
+  - AI Agent (Gemini + memory) → WhatsApp reply
+  - Schedule Trigger → Reminder AI Agent
+  - Reminder AI Agent → WhatsApp reminder
+  - Stripe Trigger → Payment confirmation on WhatsApp
+  - What each step does:
+    - WhatsApp Trigger (WhatsApp): Starts the flow when a patient sends a message.
+    - Filter (n8n): Passes on only the messages the bot should handle.
+    - AI Agent (Gemini + memory) (AI agent): Understands the message and books, reschedules or cancels.
+    - WhatsApp reply (WhatsApp): Sends the agent's answer back to the patient.
+    - Google Sheets: doctors, patients, appointments (Tool): The data the agent reads and updates.
+    - Date & Time (Tool): Gives the agent the current date and time.
+    - Schedule Trigger (n8n): Runs the reminder flow on a schedule.
+    - Reminder AI Agent (AI agent): Writes the reminder for upcoming appointments.
+    - WhatsApp reminder (WhatsApp): Delivers the reminder to the patient.
+    - Stripe Trigger (Stripe): Starts when a payment comes in.
+    - Payment confirmation on WhatsApp (WhatsApp): Confirms the payment to the patient.
+
+### Client Onboarding Automation · P05 · page /projects/client-onboarding
+- Description: An intake form triggers an n8n workflow that sets up each new client's Drive, Slack, Gmail and Calendar by project type.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n.
 - Code: https://github.com/CodeWithNouman99/n8n-automation-projects
@@ -179,6 +155,32 @@ Fields not listed for a project are not written yet, so they are not known.
     - Slack channel + message (Slack): Opens a channel for the project and posts the first message.
     - Welcome email (Gmail): Sends the client a welcome email.
     - Kickoff meeting (Calendar): Books the kickoff meeting in Google Calendar.
+
+### Hospital RAG Agent · P06 · page /projects/hospital-rag
+- Description: Answers hospital questions from a knowledge-base PDF.
+- Category: AI Automation. Status: Completed.
+- Tech: n8n, Vector DB.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects
+- Live demo: none yet.
+- Problem (summary card): Patients ask the same questions again and again, and the answers are buried in long PDFs.
+- Solution (summary card): New PDFs in Google Drive are embedded into Pinecone, and an AI agent answers questions from them.
+- Result (summary card): Answers come from the hospital's own documents; adding a PDF updates what it knows.
+- Architecture (the "How it works" diagram on the page):
+  - Google Drive Trigger (new PDF) → Download file
+  - Download file → Gemini embeddings
+  - Gemini embeddings → Pinecone vector store
+  - Chat message → AI Agent (Gemini + memory)
+  - AI Agent (Gemini + memory) → Hospital Data (Pinecone search)
+  - Hospital Data (Pinecone search) → Answer from the hospital's documents
+  - What each step does:
+    - Google Drive Trigger (new PDF) (Google Drive): Starts when a new PDF is added to the folder.
+    - Download file (n8n): Fetches the PDF so it can be processed.
+    - Gemini embeddings (Gemini): Turns the document text into vectors.
+    - Pinecone vector store (Pinecone): Keeps the vectors so they can be searched.
+    - Chat message (n8n): A question comes in from the chat.
+    - AI Agent (Gemini + memory) (AI agent): Decides what to look up and writes the answer.
+    - Hospital Data (Pinecone search) (Tool): Finds the most relevant parts of the documents.
+    - Answer from the hospital's documents (Output): The reply is based on what the PDFs say.
 
 ### Doctor Appointment Booking System · P07 · page /projects/doctor-appointment
 - Description: Patients book, doctors manage schedules, admins oversee.

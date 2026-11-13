@@ -3,7 +3,7 @@ export const profile = {
   firstName: 'Nouman',
   lastName: 'Aslam',
   location: 'Faisalabad, Pakistan',
-  role: 'MERN Stack Developer & AI Automation Builder',
+  role: 'AI Automation Builder & MERN Developer',
   availability: 'Open to internships & junior roles',
   tagline: 'Code that ships, not just compiles.',
 
@@ -57,7 +57,7 @@ export const profile = {
   // TODO: hero cut-out photo — drop a transparent PNG at src/assets/hero.png (picked up automatically)
 
   hero: {
-    kicker: 'Hy! I am',
+    kicker: 'Hey! I am',
     intro: "I ship what's worth building and automate what keeps repeating.",
     // Words in `intro` that get a soft red underline highlight
     introHighlights: ['worth building', 'keeps repeating'],
@@ -67,7 +67,7 @@ export const profile = {
       { label: 'Web apps', filter: 'Full-Stack' },
     ],
     // Shown exactly as written (no CSS uppercasing), so "n8n" keeps its lowercase like in the stats
-    floatingTags: ['MERN DEVELOPER', 'AI AUTOMATION', 'n8n BUILDER', 'PROBLEM SOLVER'],
+    floatingTags: ['AI AUTOMATION', 'n8n BUILDER', 'MERN DEVELOPER', 'PROBLEM SOLVER'],
     statsNote: 'Based in Faisalabad, Pakistan',
     // Bottom of the IMPACT card: opens the AI chat
     askAi: { title: 'My AI is online', note: 'Ask it about my projects', button: 'Ask' },
