@@ -37,11 +37,26 @@ export const projects = [
     live: 'https://devbuddy-portal.vercel.app',
     image: null,
     featured: true,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
+    overview:
+      'An AI onboarding buddy for new developers at software houses. HR adds a new developer on a web portal, and an AI buddy on WhatsApp welcomes them, answers their questions from company docs and sends one task a day. The manager follows everyone\'s progress on a dashboard. The demo runs for a fictional company, Nexora Labs.',
+    problem:
+      "A new developer's first week usually depends on someone being free to answer questions and hand out tasks. The same questions get answered again and again, and managers have no easy way to see how each new hire is getting on.",
+    howItWorks: [
+      'HR fills in a short form on the React portal to add the new developer.',
+      'The portal sends the form to an n8n webhook, which saves the developer in Google Sheets and sends a WhatsApp welcome message.',
+      'A daily workflow sends each developer their next task and a reminder, alerts the manager and records completed tasks.',
+      'The developer chats with the AI buddy on WhatsApp: it answers from the company docs, logs every question and marks a task done when the developer replies "done".',
+      'A weekly report workflow summarises progress, and the manager sees every developer on a dashboard protected by an access key.',
+    ],
+    challenges:
+      'n8n runs on my own laptop, so the live portal needed a public address to reach it. I used an ngrok static domain for the webhook and the dashboard API. The dashboard shows developer data, so it sits behind an access key and its own n8n workflow.',
+    results:
+      'The HR portal and the manager dashboard are live on Vercel. Tested end to end: adding a developer in the form creates the record and delivers a WhatsApp welcome. The daily, weekly report and dashboard workflows are all published.',
+    askQuestions: [
+      'How does the AI buddy answer questions?',
+      'What does the manager see on the dashboard?',
+      'How does a developer get their daily task?',
+    ],
   },
   {
     id: 'P02',
