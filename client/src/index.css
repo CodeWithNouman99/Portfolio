@@ -65,7 +65,7 @@
     @apply text-eyebrow uppercase tracking-eyebrow text-accent;
   }
 
-  /* "HY! I AM" hero kicker */
+  /* "HEY! I AM" hero kicker */
   .kicker {
     @apply text-kicker uppercase tracking-kicker text-muted;
   }
