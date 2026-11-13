@@ -22,78 +22,29 @@ export const defaultAskQuestions = ['What problem does it solve?', 'How does it 
 export const projects = [
   {
     id: 'P01',
-    slug: 'ai-job-hunter',
+    slug: 'devbuddy',
     summary: {
-      problem: 'Job hunting means checking several job boards every day and reading dozens of posts that never fit.',
-      solution: 'Six n8n workflows collect jobs daily, score each one against my CV with RAG and write cover letters.',
-      result: 'All six workflows (WF0–WF5) are done; top jobs, cover letters and applications are managed from WhatsApp.',
+      problem: 'A new developer\'s first week depends on someone being free to answer questions and assign tasks.',
+      solution: 'HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.',
+      result: 'HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.',
     },
-    title: 'AI Job Hunter',
-    short: 'Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.',
-    category: ['AI Automation'],
+    title: 'DevBuddy',
+    short: 'AI onboarding buddy for new developers at software houses.',
+    category: ['Full-Stack', 'AI Automation'],
     status: 'Completed',
-    tech: ['n8n', 'Gemini', 'Supabase', 'RAG'],
-    github: `${GITHUB}/n8n-automation-projects/tree/main/ai-job-hunter`,
-    live: null, // pure automation, no website
+    tech: ['n8n', 'React', 'Webhooks', 'Google Sheets', 'AI Agent'],
+    github: `${GITHUB}/devbuddy-portal`,
+    live: 'https://devbuddy-portal.vercel.app',
     image: null,
     featured: true,
-    overview: 'An AI job assistant that runs on WhatsApp. Every day it pulls jobs from Remotive, RemoteOK and JSearch, scores each one 0–100 against my CV and writes cover letters for the strong matches.',
-    problem: undefined,
-    howItWorks: undefined,
+    overview: undefined, // TODO
+    problem: undefined, // TODO
+    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
     challenges: undefined, // TODO
     results: undefined, // TODO
-    askQuestions: ['How does it match jobs to a CV?', 'What can it do on WhatsApp?', 'Which job sources does it use?'],
   },
   {
     id: 'P02',
-    slug: 'hospital-rag',
-    summary: {
-      problem: 'Patients ask the same questions again and again, and the answers are buried in long PDFs.',
-      solution: 'New PDFs in Google Drive are embedded into Pinecone, and an AI agent answers questions from them.',
-      result: 'Answers come from the hospital\'s own documents; adding a PDF updates what it knows.',
-    },
-    title: 'Hospital RAG Agent',
-    short: 'Answers hospital questions from a knowledge-base PDF.',
-    category: ['AI Automation'],
-    status: 'Completed',
-    tech: ['n8n', 'Vector DB'],
-    github: `${GITHUB}/n8n-automation-projects`,
-    live: null, // TODO
-    image: null,
-    featured: true,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
-    askQuestions: ['What problem does it solve?', 'How does it answer from PDFs?', 'What is RAG here?'],
-  },
-  {
-    id: 'P03',
-    slug: 'whatsapp-bot',
-    summary: {
-      problem: 'Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.',
-      solution: 'A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.',
-      result: 'Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.',
-    },
-    title: 'WhatsApp Doctor Appointment Bot',
-    short: 'AI agent that books, reschedules and cancels appointments.',
-    category: ['AI Automation'],
-    status: 'Completed',
-    tech: ['n8n'],
-    github: `${GITHUB}/n8n-automation-projects`,
-    live: null, // TODO
-    image: null,
-    featured: true,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
-    askQuestions: ['What problem does it solve?', 'How does booking on WhatsApp work?', 'How are reminders sent?'],
-  },
-  {
-    id: 'P04',
     slug: 'teammatch-ai',
     summary: {
       problem: 'Matching developers to a client request was done by hand: skills, free months and budget.',
@@ -108,7 +59,7 @@ export const projects = [
     github: `${GITHUB}/teammatch-ai`,
     live: null, // TODO
     image: null,
-    featured: true,
+    featured: false,
     overview: "Turns a request like \"2 React Native + 1 Rails developer, 6 months, $12k a month\" into two ready teams: Best Match and Lowest Cost. Built solo in 1–2 weeks.",
     problem: undefined,
     howItWorks: undefined,
@@ -117,38 +68,39 @@ export const projects = [
     askQuestions: ['How do the agents work together?', 'How does it choose a team?', 'What was the hardest part?'],
   },
   {
-    id: 'P05',
-    slug: 'devbuddy',
+    id: 'P03',
+    slug: 'ai-job-hunter',
     summary: {
-      problem: 'A new developer\'s first week depends on someone being free to answer questions and assign tasks.',
-      solution: 'HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.',
-      result: 'HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.',
+      problem: 'Job hunting means checking several job boards every day and reading dozens of posts that never fit.',
+      solution: 'Six n8n workflows collect jobs daily, score each one against my CV with RAG and write cover letters.',
+      result: 'All six workflows (WF0–WF5) are done; top jobs, cover letters and applications are managed from WhatsApp.',
     },
-    title: 'DevBuddy',
-    short: 'AI onboarding buddy for new developers at software houses.',
-    category: ['Full-Stack', 'AI Automation'],
+    title: 'AI Job Hunter',
+    short: 'Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.',
+    category: ['AI Automation'],
     status: 'Completed',
-    tech: [], // TODO: confirm tech stack
-    github: `${GITHUB}/devbuddy-portal`,
-    live: 'https://devbuddy-portal.vercel.app',
+    tech: ['n8n', 'Gemini', 'Supabase', 'RAG'],
+    github: `${GITHUB}/n8n-automation-projects/tree/main/ai-job-hunter`,
+    live: null, // pure automation, no website
     image: null,
-    featured: true,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
+    featured: false,
+    overview: 'An AI job assistant that runs on WhatsApp. Every day it pulls jobs from Remotive, RemoteOK and JSearch, scores each one 0–100 against my CV and writes cover letters for the strong matches.',
+    problem: undefined,
+    howItWorks: undefined,
     challenges: undefined, // TODO
     results: undefined, // TODO
+    askQuestions: ['How does it match jobs to a CV?', 'What can it do on WhatsApp?', 'Which job sources does it use?'],
   },
   {
-    id: 'P06',
-    slug: 'client-onboarding',
+    id: 'P04',
+    slug: 'whatsapp-bot',
     summary: {
-      problem: 'Every new client meant creating folders, a Slack channel, emails and a kickoff meeting by hand.',
-      solution: 'An intake form sends to n8n, which routes by project type and sets up Drive, Slack, Gmail and Calendar.',
-      result: 'One form submission sets up the whole client workspace for Web, Mobile or Automation projects.',
+      problem: 'Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.',
+      solution: 'A WhatsApp bot with an n8n AI agent that books, reschedules and cancels, with Google Sheets as the record.',
+      result: 'Patients handle bookings in chat; reminders and Stripe payment confirmations go out automatically.',
     },
-    title: 'Client Onboarding Automation',
-    short: '', // TODO: one-line description
+    title: 'WhatsApp Doctor Appointment Bot',
+    short: 'AI agent that books, reschedules and cancels appointments.',
     category: ['AI Automation'],
     status: 'Completed',
     tech: ['n8n'],
@@ -161,6 +113,54 @@ export const projects = [
     howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
     challenges: undefined, // TODO
     results: undefined, // TODO
+    askQuestions: ['What problem does it solve?', 'How does booking on WhatsApp work?', 'How are reminders sent?'],
+  },
+  {
+    id: 'P05',
+    slug: 'client-onboarding',
+    summary: {
+      problem: 'Every new client meant creating folders, a Slack channel, emails and a kickoff meeting by hand.',
+      solution: 'An intake form sends to n8n, which routes by project type and sets up Drive, Slack, Gmail and Calendar.',
+      result: 'One form submission sets up the whole client workspace for Web, Mobile or Automation projects.',
+    },
+    title: 'Client Onboarding Automation',
+    short: "An intake form triggers an n8n workflow that sets up each new client's Drive, Slack, Gmail and Calendar by project type.",
+    category: ['AI Automation'],
+    status: 'Completed',
+    tech: ['n8n'],
+    github: `${GITHUB}/n8n-automation-projects`,
+    live: null, // TODO
+    image: null,
+    featured: false,
+    overview: undefined, // TODO
+    problem: undefined, // TODO
+    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
+    challenges: undefined, // TODO
+    results: undefined, // TODO
+  },
+  {
+    id: 'P06',
+    slug: 'hospital-rag',
+    summary: {
+      problem: 'Patients ask the same questions again and again, and the answers are buried in long PDFs.',
+      solution: 'New PDFs in Google Drive are embedded into Pinecone, and an AI agent answers questions from them.',
+      result: 'Answers come from the hospital\'s own documents; adding a PDF updates what it knows.',
+    },
+    title: 'Hospital RAG Agent',
+    short: 'Answers hospital questions from a knowledge-base PDF.',
+    category: ['AI Automation'],
+    status: 'Completed',
+    tech: ['n8n', 'Vector DB'],
+    github: `${GITHUB}/n8n-automation-projects`,
+    live: null, // TODO
+    image: null,
+    featured: false,
+    overview: undefined, // TODO
+    problem: undefined, // TODO
+    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
+    challenges: undefined, // TODO
+    results: undefined, // TODO
+    askQuestions: ['What problem does it solve?', 'How does it answer from PDFs?', 'What is RAG here?'],
   },
   {
     id: 'P07',
