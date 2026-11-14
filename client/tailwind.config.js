@@ -65,8 +65,13 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
         },
+        // Moving dashes along a workflow wire (Services canvas)
+        'wire-dash': {
+          to: { strokeDashoffset: '-12' },
+        },
       },
       animation: {
+        'wire-dash': 'wire-dash 0.8s linear infinite',
         marquee: 'marquee 60s linear infinite',
         'marquee-reverse': 'marquee-reverse 80s linear infinite',
         float: 'float 4s ease-in-out infinite',

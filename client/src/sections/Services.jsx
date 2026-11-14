@@ -1,16 +1,45 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { ArrowUpRight, Code2, MessageSquareText, Minus, Network, Play, Plus, Sparkles, Workflow, Zap } from 'lucide-react'
 import { services } from '../data/services'
 import { projects } from '../data/projects'
 import { focusProject } from '../lib/focusProject'
 import { openChat } from '../lib/openChat'
-import ServiceIllustration from '../components/ServiceIllustrations'
 
-const { items } = services
-const ADVANCE_S = 6 // seconds per service while auto-playing
-const IDLE_MS = 10000 // auto-play resumes this long after the last click
+const { items, trigger, router, panel } = services
+const ICONS = { workflow: Workflow, chat: MessageSquareText, agents: Network, code: Code2 }
+const SUCCESS = '#16A34A' // "Active", "success", "✓ 4 outputs"
+
+// Canvas geometry (design units; the stage is scaled down to fit narrower canvases)
+const STAGE_W = 720
+const STAGE_H = 376
+const MID_Y = STAGE_H / 2
+const TRIGGER = { x: 20, size: 80 }
+const ROUTER = { x: 136, w: 182, h: 92 }
+const NODE = { x: 410, w: 300, h: 72, gap: 16 }
+const NODES_TOP = (STAGE_H - (items.length * NODE.h + (items.length - 1) * NODE.gap)) / 2
+const nodeTop = (i) => NODES_TOP + i * (NODE.h + NODE.gap)
+const ROUTER_OUT_X = ROUTER.x + ROUTER.w
+const BEND = (NODE.x - ROUTER_OUT_X) / 2
+
+const TRIGGER_WIRE = `M ${TRIGGER.x + TRIGGER.size} ${MID_Y} L ${ROUTER.x} ${MID_Y}`
+const nodeWire = (i) => {
+  const y = nodeTop(i) + NODE.h / 2
+  return `M ${ROUTER_OUT_X} ${MID_Y} C ${ROUTER_OUT_X + BEND} ${MID_Y}, ${NODE.x - BEND} ${y}, ${NODE.x} ${y}`
+}
+
+// Opaque accent tint, so wires and grid dots don't show through the nodes
+const ACCENT_TINT = 'bg-[color-mix(in_srgb,#FF3131_12%,rgb(var(--paper)))]'
+const WIRE = 'fill-none stroke-border'
+// Reduced motion: plain accent line (no dashes, no animation)
+const WIRE_LIVE = 'fill-none stroke-accent motion-safe:animate-wire-dash motion-safe:[stroke-dasharray:6_6]'
+const FOCUS_RING =
+  'outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper'
+const DOTS = {
+  backgroundImage: 'radial-gradient(rgb(var(--border)) 1.5px, transparent 1.5px)',
+  backgroundSize: '20px 20px',
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -29,137 +58,336 @@ function resolveLinks(links) {
     .filter(Boolean)
 }
 
-// Desktop: vertical list with a red bar and a 6s progress line on the active item
-function ServiceList({ active, progress, reduced, onSelect, onHover }) {
+// Scale factor that fits STAGE_W into the element's width (never above 1)
+function useStageScale(ref) {
+  const [scale, setScale] = useState(1)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.contentRect.width
+      if (width > 0) setScale(Math.min(1, width / STAGE_W))
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref])
+  return scale
+}
+
+// Small ring where a wire meets a node
+function Port({ side, active }) {
   return (
-    <div role="tablist" aria-label="Services" aria-orientation="vertical" className="hidden flex-col md:flex">
-      {items.map((service, i) => {
-        const isActive = i === active
-        return (
-          <button
-            key={service.id}
-            id={`service-tab-${service.id}`}
-            type="button"
-            role="tab"
-            aria-selected={isActive}
-            aria-controls="service-panel"
-            onClick={() => onSelect(i)}
-            onMouseEnter={() => onHover(i)}
-            className={`group relative border-b border-border py-6 pl-6 pr-4 text-left outline-none transition-colors first:border-t focus-visible:bg-surface-soft ${
-              isActive ? '' : 'hover:bg-surface-soft/60'
-            }`}
-          >
-            <motion.span
-              aria-hidden="true"
-              className="absolute bottom-0 left-0 top-0 w-[2px] origin-top bg-accent"
-              initial={false}
-              animate={{ scaleY: isActive ? 1 : 0 }}
-              transition={{ duration: reduced ? 0 : 0.35, ease: 'easeOut' }}
-            />
-            <span className="flex items-baseline gap-4">
-              <span className="text-[12px] font-bold tracking-[1px] text-accent">{service.id}</span>
-              <span
-                className={`text-[19px] font-semibold leading-snug transition-colors ${
-                  isActive ? 'text-ink' : 'text-ink/45 group-hover:text-ink/70'
-                }`}
-              >
-                {service.title}
-              </span>
-            </span>
-            {isActive && !reduced && (
-              <span aria-hidden="true" className="mt-4 block h-px w-full bg-border">
-                <motion.span style={{ scaleX: progress }} className="block h-px origin-left bg-accent" />
-              </span>
-            )}
-          </button>
-        )
-      })}
-    </div>
+    <span
+      aria-hidden="true"
+      className={`absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full border-2 bg-paper ${
+        side === 'left' ? '-left-[5px]' : '-right-[5px]'
+      } ${active ? 'border-accent' : 'border-grey/50'}`}
+    />
   )
 }
 
-// Mobile: horizontal row of pill tabs above the card
-function ServicePills({ active, onSelect }) {
+function TriggerTile({ className = '', children }) {
   return (
-    <div
-      role="tablist"
-      aria-label="Services"
-      className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden"
+    <span
+      className={`relative flex items-center justify-center rounded-l-[28px] rounded-r-lg border border-border bg-surface text-accent ${className}`}
     >
-      {items.map((service, i) => {
-        const isActive = i === active
-        return (
-          <button
-            key={service.id}
-            type="button"
-            role="tab"
-            aria-selected={isActive}
-            aria-controls="service-panel"
-            onClick={() => onSelect(i)}
-            className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors ${
-              isActive ? 'border-dark bg-dark text-white' : 'border-border bg-paper text-ink/55'
-            }`}
-          >
-            <span className="text-[11px] font-bold text-accent">{service.id}</span>
-            {service.title}
-          </button>
-        )
-      })}
+      <Zap size={30} strokeWidth={2} fill="currentColor" aria-hidden="true" />
+      {children}
+    </span>
+  )
+}
+
+function RouterCard({ className = '' }) {
+  return (
+    <div className={`relative flex items-center gap-3 rounded-xl border-2 border-accent px-3 ${ACCENT_TINT} ${className}`}>
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent text-white">
+        <Sparkles size={22} aria-hidden="true" />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-[15px] font-bold leading-tight text-ink-heading">{router.label}</span>
+        <span className="mt-1 block whitespace-nowrap text-[11px] leading-tight text-muted">{router.sub}</span>
+      </span>
+      <Port side="left" active />
+      <Port side="right" active />
     </div>
   )
 }
 
-function ServiceCard({ service, reduced, onProject }) {
+const outputsLabel = `✓ ${items.length} outputs`
+
+function ServiceNode({ service, index, selected, onSelect, onKeyDown, buttonRef, idPrefix, className = '', style }) {
+  const Icon = ICONS[service.icon] ?? Workflow
+  return (
+    <button
+      ref={buttonRef}
+      id={`${idPrefix}-${service.id}`}
+      type="button"
+      role="tab"
+      aria-selected={selected}
+      aria-controls="service-panel"
+      tabIndex={selected ? 0 : -1}
+      onClick={() => onSelect(index)}
+      onKeyDown={(e) => onKeyDown(e, index)}
+      style={style}
+      className={`flex items-center gap-3 rounded-xl border px-3 text-left transition-colors ${FOCUS_RING} ${
+        selected ? `border-accent ${ACCENT_TINT}` : 'border-border bg-surface hover:border-grey/40'
+      } ${className}`}
+    >
+      <span
+        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg transition-colors ${
+          selected ? 'bg-accent text-white' : 'border border-border bg-paper text-ink'
+        }`}
+      >
+        <Icon size={20} aria-hidden="true" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[14px] font-semibold leading-tight text-ink-heading">{service.title}</span>
+        <span className="mt-1 block text-[12px] leading-tight text-muted">{service.sub}</span>
+      </span>
+      <span className={`shrink-0 font-mono text-[11px] ${selected ? 'font-bold text-accent' : 'text-grey'}`}>
+        {service.id}
+      </span>
+      <Port side="left" active={selected} />
+    </button>
+  )
+}
+
+// Arrow Up/Down (and Home/End) move between nodes; selection follows focus
+function useNodeKeys(onSelect) {
+  const refs = useRef([])
+  const onKeyDown = (e, i) => {
+    const last = items.length - 1
+    const next = { ArrowDown: i === last ? 0 : i + 1, ArrowUp: i === 0 ? last : i - 1, Home: 0, End: last }[e.key]
+    if (next === undefined) return
+    e.preventDefault()
+    onSelect(next)
+    refs.current[next]?.focus()
+  }
+  return { refs, onKeyDown }
+}
+
+// Desktop: free-form canvas with absolutely positioned nodes and an SVG wire layer
+function Stage({ active, onSelect }) {
+  const wrapRef = useRef(null)
+  const scale = useStageScale(wrapRef)
+  const { refs, onKeyDown } = useNodeKeys(onSelect)
+
+  return (
+    <div ref={wrapRef} className="relative w-full" style={{ height: STAGE_H * scale }}>
+      <div
+        className="absolute left-1/2 top-0 origin-top"
+        style={{ width: STAGE_W, height: STAGE_H, transform: `translateX(-50%) scale(${scale})` }}
+      >
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          width={STAGE_W}
+          height={STAGE_H}
+          viewBox={`0 0 ${STAGE_W} ${STAGE_H}`}
+        >
+          {items.map((service, i) => i !== active && <path key={service.id} d={nodeWire(i)} strokeWidth="2" className={WIRE} />)}
+          <path d={TRIGGER_WIRE} strokeWidth="2" className={WIRE_LIVE} />
+          <path d={nodeWire(active)} strokeWidth="2" className={WIRE_LIVE} />
+        </svg>
+
+        {/* Trigger */}
+        <div className="absolute" style={{ left: TRIGGER.x, top: MID_Y - TRIGGER.size / 2, width: TRIGGER.size }}>
+          <TriggerTile className="h-20 w-20">
+            <Port side="right" active />
+          </TriggerTile>
+          <div className="absolute left-1/2 top-full mt-2.5 w-32 -translate-x-1/2 text-center">
+            <p className="text-[13px] font-semibold leading-tight text-ink-heading">{trigger.label}</p>
+            <p className="mt-1 text-[11px] leading-tight text-muted">{trigger.sub}</p>
+          </div>
+        </div>
+
+        {/* Router */}
+        <div className="absolute" style={{ left: ROUTER.x, top: MID_Y - ROUTER.h / 2, width: ROUTER.w }}>
+          <RouterCard className="h-[92px]" />
+          <p className="mt-2.5 text-center font-mono text-[12px]" style={{ color: SUCCESS }}>
+            {outputsLabel}
+          </p>
+        </div>
+
+        {/* Services */}
+        <div role="tablist" aria-label={services.eyebrow} aria-orientation="vertical">
+          {items.map((service, i) => (
+            <ServiceNode
+              key={service.id}
+              service={service}
+              index={i}
+              selected={i === active}
+              onSelect={onSelect}
+              onKeyDown={onKeyDown}
+              buttonRef={(el) => (refs.current[i] = el)}
+              idPrefix="service-node"
+              className="absolute"
+              style={{ left: NODE.x, top: nodeTop(i), width: NODE.w, height: NODE.h }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Mobile: trigger → router → node list, joined by short accent lines
+function MobileFlow({ active, onSelect }) {
+  const { refs, onKeyDown } = useNodeKeys(onSelect)
+  const line = <span aria-hidden="true" className="ml-[27px] block h-6 w-0.5 bg-accent" />
+
+  return (
+    <div className="p-4">
+      <div className="flex items-center gap-3">
+        <TriggerTile className="h-14 w-14 shrink-0" />
+        <div>
+          <p className="text-[14px] font-semibold leading-tight text-ink-heading">{trigger.label}</p>
+          <p className="mt-1 text-[12px] leading-tight text-muted">{trigger.sub}</p>
+        </div>
+      </div>
+      {line}
+      <RouterCard className="h-[72px] w-full" />
+      <div className="flex items-center gap-3">
+        {line}
+        <p className="font-mono text-[12px]" style={{ color: SUCCESS }}>
+          {outputsLabel}
+        </p>
+      </div>
+      <div role="tablist" aria-label={services.eyebrow} aria-orientation="vertical" className="flex flex-col gap-2.5">
+        {items.map((service, i) => (
+          <ServiceNode
+            key={service.id}
+            service={service}
+            index={i}
+            selected={i === active}
+            onSelect={onSelect}
+            onKeyDown={onKeyDown}
+            buttonRef={(el) => (refs.current[i] = el)}
+            idPrefix="service-node-m"
+            className="relative h-[72px] w-full"
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Canvas({ active, onSelect, reduced }) {
+  const runWorkflow = () =>
+    document.getElementById('projects')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })
+
+  return (
+    <div className="min-w-0 overflow-hidden rounded-[20px] border border-border bg-paper" style={DOTS}>
+      {/* Editor tab bar */}
+      <div className="flex items-center gap-3 border-b border-border bg-paper px-4 py-2.5">
+        <span aria-hidden="true" className="flex gap-1.5">
+          {[0, 1, 2].map((dot) => (
+            <span key={dot} className="h-2.5 w-2.5 rounded-full bg-border" />
+          ))}
+        </span>
+        <span className="min-w-0 truncate font-mono text-[12px] text-grey">{services.file}</span>
+        <span className="ml-auto flex shrink-0 items-center gap-2 font-mono text-[12px] text-grey">
+          <span className="relative flex h-2 w-2" aria-hidden="true">
+            <span className="absolute inline-flex h-full w-full rounded-full opacity-75 motion-safe:animate-ping" style={{ background: SUCCESS }} />
+            <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: SUCCESS }} />
+          </span>
+          {services.status}
+        </span>
+      </div>
+
+      <div className="hidden px-4 pb-2 pt-8 md:block lg:px-6">
+        <Stage active={active} onSelect={onSelect} />
+      </div>
+      <div className="md:hidden">
+        <MobileFlow active={active} onSelect={onSelect} />
+      </div>
+
+      <div className="flex items-center justify-between gap-3 px-4 pb-4 md:px-5 md:pb-5">
+        {/* Decorative zoom controls, like an editor canvas */}
+        <span aria-hidden="true" className="hidden gap-1.5 md:flex">
+          {[Plus, Minus].map((Icon, i) => (
+            <span key={i} className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-paper text-grey">
+              <Icon size={15} />
+            </span>
+          ))}
+        </span>
+        <button
+          type="button"
+          onClick={runWorkflow}
+          className={`ml-auto inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-accent/90 ${FOCUS_RING}`}
+        >
+          <Play size={13} fill="currentColor" aria-hidden="true" />
+          {services.execute}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function NodePanel({ service, reduced, onProject }) {
+  const Icon = ICONS[service.icon] ?? Workflow
   const links = resolveLinks(service.links)
+  const label = 'text-stat-label uppercase tracking-stat text-muted'
 
   return (
     <div
       id="service-panel"
       role="tabpanel"
-      aria-labelledby={`service-tab-${service.id}`}
-      className="rounded-2xl border border-border bg-paper p-5 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.18)] md:p-8"
+      aria-labelledby="service-panel-title"
+      className="min-w-0 rounded-[20px] border border-border bg-paper p-5 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.18)] md:p-6"
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={service.id}
-          initial={reduced ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } }}
+          initial={reduced ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } }}
           exit={reduced ? { opacity: 1 } : { opacity: 0, y: -6, transition: { duration: 0.15, ease: 'easeIn' } }}
         >
-          <div className="flex h-[200px] items-center justify-center rounded-xl bg-surface-soft p-3 md:h-[260px] md:p-4">
-            <ServiceIllustration type={service.illustration} reduced={reduced} />
+          <div className="flex items-center gap-3">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-white">
+              <Icon size={15} aria-hidden="true" />
+            </span>
+            <span className="eyebrow">
+              {panel.node} {service.id}
+            </span>
+            <span className="ml-auto font-mono text-[12px]" style={{ color: SUCCESS }}>
+              ● {panel.status}
+            </span>
           </div>
 
-          <h3 className="mt-6 text-[20px] font-bold leading-snug text-ink-heading md:mt-7 md:text-[22px]">
+          <h3 id="service-panel-title" className="mt-5 text-[24px] font-bold leading-tight md:text-[26px]">
             {service.title}
           </h3>
-          <p className="mt-3 text-[15px] leading-[1.7] text-ink/60 md:text-base">{service.description}</p>
+          <p className="mt-3 text-[15px] leading-[1.7]">{service.description}</p>
 
-          <ul className="mt-5 flex flex-wrap gap-2" aria-label="Tech">
+          <p className={`mt-6 ${label}`}>{panel.parameters}</p>
+          <ul className="mt-3 flex flex-wrap gap-2" aria-label={panel.parameters}>
             {service.chips.map((chip) => (
-              <li key={chip} className="rounded-full bg-surface px-3.5 py-1.5 text-[12px] font-medium text-ink">
+              <li key={chip} className="rounded-md border border-border bg-surface px-2.5 py-1 font-mono text-[12px] text-ink">
                 {chip}
               </li>
             ))}
           </ul>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border pt-5">
-            <span className="text-stat-label uppercase tracking-stat text-muted">{services.seeItIn}</span>
+          <p className={`mt-6 ${label}`}>{panel.output}</p>
+          <ul className="mt-2">
             {links.map((link) => (
-              <button
-                key={link.key}
-                type="button"
-                onClick={() => (link.chat ? openChat() : onProject(link.project.id))}
-                className="group/link inline-flex items-center gap-1 text-sm font-bold text-accent transition-colors hover:text-ink"
-              >
-                {link.label}
-                <ArrowUpRight
-                  size={15}
-                  className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
-                />
-              </button>
+              <li key={link.key} className="border-b border-border last:border-b-0">
+                <button
+                  type="button"
+                  onClick={() => (link.chat ? openChat() : onProject(link.project.id))}
+                  className={`group/link flex w-full items-center justify-between gap-3 rounded-sm py-3 text-left text-[14px] font-semibold text-ink-heading transition-colors hover:text-accent ${FOCUS_RING}`}
+                >
+                  {link.label}
+                  <ArrowUpRight
+                    size={16}
+                    aria-hidden="true"
+                    className="shrink-0 text-accent transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                  />
+                </button>
+              </li>
             ))}
-          </div>
+          </ul>
         </motion.div>
       </AnimatePresence>
     </div>
@@ -170,45 +398,6 @@ export default function Services() {
   const reduced = useReducedMotion()
   const navigate = useNavigate()
   const [active, setActive] = useState(0)
-  const [hovering, setHovering] = useState(false)
-  const [clicked, setClicked] = useState(false)
-  const idleTimer = useRef(null)
-  const progress = useMotionValue(0) // 0 → 1 over ADVANCE_S for the active item
-  const playback = useRef(null)
-
-  const paused = reduced || hovering || clicked
-
-  // Auto-advance: runs the progress line from where it stopped; when it fills, move to the next service
-  useEffect(() => {
-    if (paused) return
-    const controls = (playback.current = animate(progress, 1, {
-      duration: (1 - progress.get()) * ADVANCE_S,
-      ease: 'linear',
-      onComplete: () => {
-        progress.set(0)
-        setActive((i) => (i + 1) % items.length)
-      },
-    }))
-    return () => controls.stop()
-  }, [paused, active, progress])
-
-  useEffect(() => () => clearTimeout(idleTimer.current), [])
-
-  const restart = (i) => {
-    playback.current?.stop() // otherwise it writes one more frame over the reset
-    progress.set(0)
-    setActive(i)
-  }
-  // Hover: switch without touching the current item's progress
-  const show = (i) => i !== active && restart(i)
-
-  // Click/tap: switch (or restart the same item) and pause auto-play until 10s of no clicks
-  const select = (i) => {
-    restart(i)
-    setClicked(true)
-    clearTimeout(idleTimer.current)
-    idleTimer.current = setTimeout(() => setClicked(false), IDLE_MS)
-  }
 
   return (
     <section id="services" className="relative overflow-x-clip py-20 md:py-28">
@@ -224,22 +413,18 @@ export default function Services() {
         >
           <div>
             <p className="eyebrow">{services.eyebrow}</p>
-            <h2 className="section-title mt-4">{services.title}</h2>
+            <h2 className="section-title mt-4 max-w-[760px]">{services.title}</h2>
           </div>
           <p className="max-w-sm text-[15px] text-muted md:text-right">{services.intro}</p>
         </motion.div>
 
-        {/* Mouse hover over the tour pauses auto-play (touch "hover" is ignored so taps don't pause it forever) */}
         <motion.div
           variants={fadeUp}
           {...inView}
-          onPointerEnter={(e) => e.pointerType === 'mouse' && setHovering(true)}
-          onPointerLeave={(e) => e.pointerType === 'mouse' && setHovering(false)}
-          className="relative mt-12 grid gap-6 md:mt-16 md:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] md:gap-10 lg:gap-14"
+          className="relative mt-12 grid gap-6 md:mt-16 lg:grid-cols-[minmax(0,1fr)_340px]"
         >
-          <ServicePills active={active} onSelect={select} />
-          <ServiceList active={active} progress={progress} reduced={reduced} onSelect={select} onHover={show} />
-          <ServiceCard service={items[active]} reduced={reduced} onProject={(id) => focusProject(id, navigate)} />
+          <Canvas active={active} onSelect={setActive} reduced={reduced} />
+          <NodePanel service={items[active]} reduced={reduced} onProject={(id) => focusProject(id, navigate)} />
         </motion.div>
       </div>
     </section>

@@ -47,8 +47,8 @@ export default function Home() {
       {/* Moving skill strips (components/SkillMarquee + TechMarquee) replaced by a still grouped stack */}
       <TechStack />
       <About />
-      <Services />
       <Projects />
+      <Services />
       {sections.showJourney && <Timeline />}
       {/* Build Logs (sections/BuildLogs.jsx, data/logs.js) is hidden for now; render <BuildLogs /> here to bring it back */}
       <Certifications />
