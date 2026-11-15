@@ -166,24 +166,30 @@ export const projects = [
     id: 'P07',
     slug: 'doctor-appointment',
     summary: {
-      problem: 'Patients need a simple way to find a doctor and book a slot without calling the clinic.',
-      solution: 'A MERN app where patients browse doctors by speciality and book, and doctors and admins manage schedules.',
-      result: 'In progress: the patient pages are built, the backend is being built next.',
+      problem: 'Patients need a simple way to find a doctor and book a slot without calling the clinic, and double bookings must never happen.',
+      solution: 'A MERN app with three roles (patient, admin, doctor). Booking reserves the slot in one atomic database update and validates every slot on the server.',
+      result: 'Live on Vercel: patient site, admin panel and doctor panel, with role-based JWT auth checked by a cross-role token test.',
     },
     title: 'Doctor Appointment Booking System',
-    short: 'Patients book, doctors manage schedules, admins oversee.',
+    short: 'Full-stack booking platform for patients, doctors and admins.',
     category: ['Full-Stack'],
-    status: 'In Progress',
-    tech: ['MERN'],
+    status: 'Completed',
+    tech: ['React', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'Cloudinary', 'Vercel'],
     github: `${GITHUB}/doctor-appointment-system-mern`,
-    live: null, // TODO
+    live: 'https://doctor-appointment-frontend-azure.vercel.app',
     image: null,
     featured: false,
-    overview: undefined, // TODO
-    problem: undefined, // TODO
-    howItWorks: undefined, // TODO: ['step 1', 'step 2', …]
-    challenges: undefined, // TODO
-    results: undefined, // TODO
+    overview: 'A full-stack appointment platform with patient, admin and doctor roles. I started from a tutorial base and extended it myself: role-based JWT auth, atomic slot booking, slot validation, auto-logout on token expiry, a real 7-day bookings chart on the admin dashboard, a complete doctor panel and a security audit with fixes.',
+    problem: undefined,
+    howItWorks: [
+      'Patients browse doctors by speciality and pick a free slot in the next 7 days.',
+      'The server validates the slot (10:00 to 21:00, 30-minute steps, not in the past) and reserves it in a single database update, so two people cannot take the same slot.',
+      'Admins manage doctors and appointments and see real bookings per day; doctors complete or cancel their own appointments.',
+      'Separate patient, admin and doctor tokens carry a role claim, and every route rejects tokens of the wrong role.',
+    ],
+    challenges: 'A security audit found that a doctor token was accepted on patient routes. I added a role claim and a role check, then re-ran a cross-role token test (476 checks) to confirm it. Six simultaneous requests for one slot now give exactly one booking.',
+    results: 'Deployed as three Vercel projects (patient site, admin and doctor panel, API). Admin panel: https://doctor-appointment-admin-ten.vercel.app. Payments are intentionally left as a future improvement.',
+    askQuestions: ['How does it stop double booking?', 'How does role-based auth work?', 'What did you build beyond the tutorial?'],
   },
   {
     id: 'P08',

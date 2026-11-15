@@ -168,11 +168,11 @@ export const architecture = {
   },
 
   'doctor-appointment': {
-    note: 'The frontend is built; the backend is in progress.',
+    note: 'Three roles share one Express API; every route checks the role in the token.',
     nodes: [
       { id: 'patient', label: 'Patient pages (React)', tag: 'React', x: 12, y: 28, note: 'Patients browse doctors by speciality and book a slot.' },
       { id: 'panel', label: 'Doctor & admin panel (React)', tag: 'React', x: 12, y: 76, note: 'Doctors manage their schedule; admins oversee everything.' },
-      { id: 'api', label: 'Express API', tag: 'Express', x: 50, y: 52, note: 'REST endpoints for doctors and bookings (in progress).' },
+      { id: 'api', label: 'Express API', tag: 'Express', x: 50, y: 52, note: 'REST endpoints with role-based JWT auth and atomic slot booking.' },
       { id: 'db', label: 'MongoDB', tag: 'MongoDB', x: 86, y: 52, note: 'Stores doctors, patients and appointments.' },
     ],
     edges: [
