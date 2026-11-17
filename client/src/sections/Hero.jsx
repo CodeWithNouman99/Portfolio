@@ -274,7 +274,7 @@ function PhotoColumn() {
   )
 }
 
-// "5+" counts 0+ → 5+, "3.52" counts 0.00 → 3.52; once, when it first scrolls into view.
+// "5+" counts 0+ → 5+, "3.51" counts 0.00 → 3.51; once, when it first scrolls into view.
 // Screen readers get the final value only; reduced motion shows it straight away.
 function CountUp({ value }) {
   const ref = useRef(null)

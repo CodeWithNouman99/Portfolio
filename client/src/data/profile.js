@@ -40,7 +40,7 @@ export const profile = {
   // Labels are shown exactly as written (no CSS uppercasing, so "n8n" keeps its lowercase).
   stats: [
     { value: '3', label: 'WEB APPS BUILT' },
-    { value: '5+', label: 'n8n AUTOMATIONS' },
+    { value: '8+', label: 'n8n AUTOMATIONS' },
     { value: '3.51', label: 'CGPA / 4.0' },
   ],
 
@@ -67,7 +67,7 @@ export const profile = {
       { label: 'Web apps', filter: 'Full-Stack' },
     ],
     // Shown exactly as written (no CSS uppercasing), so "n8n" keeps its lowercase like in the stats
-    floatingTags: ['AI AUTOMATION', 'n8n BUILDER', 'MERN DEVELOPER', 'PROBLEM SOLVER'],
+    floatingTags: ['AI AUTOMATION', 'n8n BUILDER', 'MERN DEVELOPER', 'VOICE AI'],
     statsNote: 'Based in Faisalabad, Pakistan',
     // Bottom of the IMPACT card: opens the AI chat
     askAi: { title: 'My AI is online', note: 'Ask it about my projects', button: 'Ask' },

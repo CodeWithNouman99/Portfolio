@@ -69,7 +69,7 @@ Signature effects:
 - Name: Nouman Aslam · Faisalabad, Pakistan
 - Role: MERN Stack Developer & AI Automation Builder · Open to internships & junior roles
 - Tagline: "Code that ships, not just compiles."
-- Education: BS Software Engineering, University of Agriculture Faisalabad (2023 – present), CGPA 3.52/4.0
+- Education: BS Software Engineering, University of Agriculture Faisalabad (2023 – present), CGPA 3.51/4.0
 - Certifications: Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate (Oracle University, 2025, valid until Aug 2027); Career Essentials in Software Development (Microsoft & LinkedIn Learning, Mar 2025, Learning Path; skills: Programming, Software Development) — TODO: verify links
 - Stack: React.js, JavaScript (ES6+), Tailwind CSS, Context API, Node.js, Express.js, MongoDB, REST APIs, n8n, Gemini, RAG / vector DBs, Git, Oracle SQL
 - Links: GitHub https://github.com/CodeWithNouman99 · LinkedIn https://www.linkedin.com/in/nouman-aslam-a9a3a2333 · Email mrnoumannomi7@gmail.com

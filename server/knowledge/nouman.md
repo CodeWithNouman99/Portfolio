@@ -25,13 +25,13 @@ If something is not written here, it is not known.
 
 ## Impact (numbers shown on the portfolio)
 - 3 web apps built.
-- 5+ n8n automations built.
-- CGPA 3.52 / 4.0.
+- 8+ n8n automations built.
+- CGPA 3.51 / 4.0.
 
 ## Education
 - BS Software Engineering, University of Agriculture Faisalabad (UAF).
 - Period: 2023 – present (currently studying).
-- CGPA: 3.52 / 4.0.
+- CGPA: 3.51 / 4.0.
 
 ## Certifications
 1. Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate — issued by Oracle University, earned 2025, valid until Aug 2027.
