@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, ExternalLink } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 import { githubRepos, projectFilters, projects } from '../data/projects'
 import { GithubIcon } from '../components/BrandIcons'
 import StatusBadge from '../components/StatusBadge'
@@ -12,6 +12,9 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 }
 const inView = { initial: 'hidden', whileInView: 'show', viewport: { once: true, amount: 0.2 } }
+
+// Rows shown per filter before "Show N more projects"
+const COLLAPSED_COUNT = 5
 
 function IconButton({ href, label, tip, children }) {
   return (
@@ -63,6 +66,11 @@ const ProjectRow = forwardRef(function ProjectRow({ project, onHover, highlighte
               Featured
             </span>
           )}
+          {project.badge && (
+            <span className="shrink-0 rounded-full border border-accent px-2 py-0.5 text-[10px] font-bold uppercase tracking-[1px] text-accent">
+              {project.badge}
+            </span>
+          )}
           <ArrowRight
             size={16}
             className="shrink-0 -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
@@ -77,7 +85,9 @@ const ProjectRow = forwardRef(function ProjectRow({ project, onHover, highlighte
             {project.tech.map((t) => (
               <li
                 key={t}
-                className="rounded-full bg-surface px-2.5 py-0.5 text-[11px] font-medium text-grey"
+                className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${
+                  project.highlightTech?.includes(t) ? 'bg-[#2A0A0A] text-[#FF8A8A]' : 'bg-surface text-grey'
+                }`}
               >
                 {t}
               </li>
@@ -163,7 +173,13 @@ function ShowcaseCard({ project }) {
 }
 
 export default function Projects() {
-  const [filter, setFilter] = useState('AI Automation')
+  const [filter, setFilterState] = useState('AI Automation')
+  const [expanded, setExpanded] = useState(false)
+  // A new filter always starts collapsed
+  const setFilter = (f) => {
+    setFilterState(f)
+    setExpanded(false)
+  }
   const [hovered, setHovered] = useState(projects[0])
   const [highlighted, setHighlighted] = useState(null)
 
@@ -175,6 +191,8 @@ export default function Projects() {
       if (!project) return
       timers.forEach(clearTimeout)
       setFilter('All')
+      // The row must be rendered to scroll to it
+      if (projects.indexOf(project) >= COLLAPSED_COUNT) setExpanded(true)
       setHovered(project)
       setHighlighted(project.id)
       timers = [
@@ -202,7 +220,9 @@ export default function Projects() {
     return () => window.removeEventListener('projects:filter', onFilter)
   }, [])
 
-  const visible = filter === 'All' ? projects : projects.filter((p) => p.category.includes(filter))
+  const filtered = filter === 'All' ? projects : projects.filter((p) => p.category.includes(filter))
+  const hiddenCount = Math.max(filtered.length - COLLAPSED_COUNT, 0)
+  const visible = expanded ? filtered : filtered.slice(0, COLLAPSED_COUNT)
 
   return (
     <section id="projects" className="relative overflow-x-clip py-20 md:py-28">
@@ -260,6 +280,22 @@ export default function Projects() {
                 ))}
               </AnimatePresence>
             </motion.ul>
+
+            {hiddenCount > 0 && (
+              <motion.button
+                layout
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                aria-expanded={expanded}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-card border border-dashed border-ink/25 bg-surface py-4 text-sm font-medium text-ink transition-colors hover:bg-border"
+              >
+                {expanded ? (
+                  <>Show less <ChevronUp size={16} /></>
+                ) : (
+                  <>Show {hiddenCount} more {hiddenCount === 1 ? 'project' : 'projects'} <ChevronDown size={16} /></>
+                )}
+              </motion.button>
+            )}
           </motion.div>
 
           <motion.aside variants={fadeUp} {...inView} className="hidden lg:block">

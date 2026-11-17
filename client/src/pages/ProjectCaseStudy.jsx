@@ -96,7 +96,7 @@ const SLIDE_MS = 4000
 // Top image frame: every project image stacked in one fixed-size frame, cross-fading every 4s.
 // Pauses on hover and while the tab is hidden; no auto-play with reduced motion (dots still work).
 // Clicking the image opens the lightbox at that image.
-function Slideshow({ images, title, onOpen }) {
+function Slideshow({ images, title, mainAlt, contain, onOpen }) {
   const reduced = useReducedMotion()
   const [active, setActive] = useState(0)
   const [hovered, setHovered] = useState(false)
@@ -118,7 +118,7 @@ function Slideshow({ images, title, onOpen }) {
 
   return (
     <div
-      className="relative aspect-[16/10] w-full overflow-hidden rounded-[0.6rem]"
+      className={`relative aspect-[16/10] w-full overflow-hidden rounded-[0.6rem] ${contain ? 'bg-[#1A1A1A]' : ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -134,7 +134,7 @@ function Slideshow({ images, title, onOpen }) {
             <motion.img
               key={src}
               src={src}
-              alt={isActive ? `${title} screenshot` : ''}
+              alt={isActive ? (i === 0 && mainAlt) || `${title} screenshot` : ''}
               initial={false}
               animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.02 }}
               // Leaving image: fade only, then reset its scale out of sight so it enters at 1.02 next time
@@ -145,7 +145,7 @@ function Slideshow({ images, title, onOpen }) {
                     ? { duration: 0.8, ease: 'easeOut' }
                     : { opacity: { duration: 0.8, ease: 'easeOut' }, scale: { duration: 0, delay: 0.8 } }
               }
-              className="absolute inset-0 h-full w-full object-cover object-top"
+              className={`absolute inset-0 h-full w-full ${contain ? 'object-contain object-center' : 'object-cover object-top'}`}
             />
           )
         })}
@@ -310,7 +310,7 @@ export default function ProjectCaseStudy() {
             )}
             <motion.div variants={item} className="mt-5 flex flex-wrap items-center gap-2">
               <StatusBadge status={project.status} />
-              {project.category.map((c) => (
+              {[...project.category, ...(project.labels ?? [])].map((c) => (
                 <span key={c} className="rounded-full bg-surface px-3 py-1 text-[12px] font-medium text-ink">{c}</span>
               ))}
             </motion.div>
@@ -318,7 +318,7 @@ export default function ProjectCaseStudy() {
               {project.live && (
                 <a href={project.live} target="_blank" rel="noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-[13px] font-bold text-white shadow-[0_8px_24px_-10px_rgba(255,49,49,0.7)] transition-transform hover:-translate-y-0.5">
-                  Live <ArrowUpRight size={15} />
+                  {project.liveLabel ?? 'Live'} <ArrowUpRight size={15} />
                 </a>
               )}
               <a href={project.github} target="_blank" rel="noreferrer"
@@ -326,6 +326,11 @@ export default function ProjectCaseStudy() {
                 <GithubIcon size={15} /> GitHub <ArrowUpRight size={15} />
               </a>
             </motion.div>
+            {hasText(project.liveNote) && (
+              <motion.p variants={item} className="mt-3 max-w-md text-[12px] leading-relaxed text-muted">
+                {project.liveNote}
+              </motion.p>
+            )}
           </motion.div>
 
           <motion.div
@@ -337,7 +342,7 @@ export default function ProjectCaseStudy() {
             <div aria-hidden="true" className="absolute -inset-4 -z-10 rounded-[28px] bg-[radial-gradient(60%_60%_at_70%_30%,rgba(255,49,49,0.12),transparent_70%)]" />
             <div className="overflow-hidden rounded-2xl border border-border bg-surface-soft p-2 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.25)]">
               {images.length > 0 ? (
-                <Slideshow key={slug} images={images} title={project.title} onOpen={setLightbox} />
+                <Slideshow key={slug} images={images} title={project.title} mainAlt={project.imageAlt} contain={project.imageFit === 'contain'} onOpen={setLightbox} />
               ) : (
                 <div className="flex aspect-[16/10] items-end rounded-[0.25rem] bg-[radial-gradient(circle_at_30%_20%,#3a3a3a,#111_70%)] p-6">
                   <span className="text-[64px] font-black leading-none text-white/10">{project.id}</span>

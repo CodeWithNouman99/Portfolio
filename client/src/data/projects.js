@@ -18,6 +18,14 @@ export const defaultAskQuestions = ['What problem does it solve?', 'How does it 
 //   results:    string           → "Results" (real outcomes only)
 //   summary:    { problem, solution, result } → three small cards under the header
 //   askQuestions: string[]       → suggested chips in the "Ask AI about this project" box
+//   labels:     string[]         → extra chips next to the category chips in the header
+//   liveLabel:  string           → text of the live button (default "Live")
+//   liveNote:   string           → small muted line under the header buttons
+//   imageAlt:   string           → alt text of the main image
+//   imageFit:   'contain'        → show the whole image on a dark background instead of cropping it
+// List row optional fields:
+//   badge:         string        → outline badge next to the title (e.g. "New"); `featured` shows the filled one
+//   highlightTech: string[]      → tech tags drawn in the highlighted (dark red) style
 // TODO: live URLs and screenshots for the remaining projects
 export const projects = [
   {
@@ -45,6 +53,37 @@ export const projects = [
   },
   {
     id: 'P02',
+    slug: 'tabletalk-ai',
+    summary: {
+      problem: 'Busy restaurants miss calls at peak hours, and bookings live in a notebook.',
+      solution: 'Ayesha, an ElevenLabs voice agent, answers every call, books tables and saves them live to Google Sheets through n8n.',
+      result: 'Book, change and cancel tested end to end on real calls, with one clean row per booking.',
+    },
+    title: 'TableTalk AI',
+    short: 'Voice receptionist that books, changes and cancels restaurant tables in Urdu and English.',
+    category: ['AI Automation'],
+    status: 'Completed',
+    tech: ['Voice AI', 'ElevenLabs', 'n8n', 'Google Sheets'],
+    highlightTech: ['Voice AI'],
+    labels: ['Voice AI'],
+    badge: 'New',
+    github: `${GITHUB}/n8n-automation-projects/tree/main/tabletalk-ai`,
+    live: 'https://elevenlabs.io/app/talk-to?agent_id=agent_0101m7ndx4kyfbv818qrs81hb9ce',
+    liveLabel: 'Talk to Ayesha',
+    liveNote: 'Menu questions work anytime. Bookings save to the sheet during demo hours.',
+    image: null,
+    imageAlt: 'n8n workflow that finds and updates a reservation',
+    imageFit: 'contain',
+    featured: false,
+    overview: 'Callers speak Urdu or English. Ayesha answers menu, timing and parking questions from a knowledge base, and uses two webhook tools to write bookings into a Google Sheet. Changes and cancellations find the booking by phone number.',
+    problem: undefined,
+    howItWorks: undefined,
+    challenges: undefined,
+    results: undefined,
+    askQuestions: ['How does Ayesha save a booking?', 'How is a wrong cancel prevented?', 'What is it built with?'],
+  },
+  {
+    id: 'P03',
     slug: 'teammatch-ai',
     summary: {
       problem: 'Matching developers to a client request was done by hand: skills, free months and budget.',
@@ -68,7 +107,7 @@ export const projects = [
     askQuestions: ['How do the agents work together?', 'How does it choose a team?', 'What was the hardest part?'],
   },
   {
-    id: 'P03',
+    id: 'P04',
     slug: 'ai-job-hunter',
     summary: {
       problem: 'Job hunting means checking several job boards every day and reading dozens of posts that never fit.',
@@ -92,7 +131,7 @@ export const projects = [
     askQuestions: ['How does it match jobs to a CV?', 'What can it do on WhatsApp?', 'Which job sources does it use?'],
   },
   {
-    id: 'P04',
+    id: 'P05',
     slug: 'whatsapp-bot',
     summary: {
       problem: 'Booking, rescheduling or cancelling a clinic appointment usually means calling and waiting.',
@@ -116,7 +155,7 @@ export const projects = [
     askQuestions: ['What problem does it solve?', 'How does booking on WhatsApp work?', 'How are reminders sent?'],
   },
   {
-    id: 'P05',
+    id: 'P06',
     slug: 'client-onboarding',
     summary: {
       problem: 'Every new client meant creating folders, a Slack channel, emails and a kickoff meeting by hand.',
@@ -139,7 +178,7 @@ export const projects = [
     results: undefined, // TODO
   },
   {
-    id: 'P06',
+    id: 'P07',
     slug: 'hospital-rag',
     summary: {
       problem: 'Patients ask the same questions again and again, and the answers are buried in long PDFs.',
@@ -163,7 +202,7 @@ export const projects = [
     askQuestions: ['What problem does it solve?', 'How does it answer from PDFs?', 'What is RAG here?'],
   },
   {
-    id: 'P07',
+    id: 'P08',
     slug: 'doctor-appointment',
     summary: {
       problem: 'Patients need a simple way to find a doctor and book a slot without calling the clinic, and double bookings must never happen.',
@@ -192,7 +231,7 @@ export const projects = [
     askQuestions: ['How does it stop double booking?', 'How does role-based auth work?', 'What did you build beyond the tutorial?'],
   },
   {
-    id: 'P08',
+    id: 'P09',
     slug: 'hirehub',
     summary: {
       problem: 'Job seekers need one place to browse openings, and employers a quick way to post them.',
@@ -215,7 +254,7 @@ export const projects = [
     results: undefined, // TODO
   },
   {
-    id: 'P09',
+    id: 'P10',
     slug: 'cartify',
     summary: {
       problem: 'A shop front has to let people browse products and build a cart smoothly on any screen.',

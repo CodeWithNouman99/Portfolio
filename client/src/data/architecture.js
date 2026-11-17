@@ -144,6 +144,31 @@ export const architecture = {
     mainPath: ['msg', 'agent', 'reply'],
   },
 
+  'tabletalk-ai': {
+    note: 'Every booking gets a reservation ID that Ayesha reads back to the caller.',
+    nodes: [
+      { id: 'caller', label: 'Caller', tag: 'Phone / web', x: 8, y: 18, note: 'A guest calls and speaks in Urdu or English.' },
+      { id: 'ayesha', label: 'Ayesha', tag: 'ElevenLabs', x: 30, y: 18, ai: true, note: 'Voice agent that listens, replies and decides which tool to use.' },
+      { id: 'kb', label: 'Knowledge base', tag: 'RAG', x: 10, y: 82, note: 'Menu, deals, timings and policies, so prices are never made up.' },
+      { id: 'book', label: 'book_reservation', tag: 'Webhook tool', x: 56, y: 18, note: 'Sends name, phone, date, time, guests and seating to n8n.' },
+      { id: 'append', label: 'n8n: append row', tag: 'n8n', x: 84, y: 18, note: 'Creates an ID like LTH-261118004454 and saves the booking.' },
+      { id: 'sheets', label: 'Google Sheets', tag: 'Database', x: 84, y: 50, note: 'One row per booking with status Confirmed, Changed or Cancelled.' },
+      { id: 'update', label: 'update_reservation', tag: 'Webhook tool', x: 56, y: 82, note: 'Finds the booking by phone, then changes or cancels it.' },
+      { id: 'safety', label: 'Safety check', tag: 'IF node', x: 84, y: 82, note: 'Cancels only if no new date, time or guests were sent.' },
+    ],
+    edges: [
+      ['caller', 'ayesha'],
+      ['ayesha', 'kb', 'tool'],
+      ['ayesha', 'book'],
+      ['book', 'append'],
+      ['append', 'sheets'],
+      ['ayesha', 'update'],
+      ['update', 'safety'],
+      ['safety', 'sheets'],
+    ],
+    mainPath: ['caller', 'ayesha', 'book', 'append', 'sheets'],
+  },
+
   'client-onboarding': {
     nodes: [
       { id: 'form', label: 'Intake website', tag: 'Website', x: 8, y: 25, note: 'The new client fills in one form.' },

@@ -31,7 +31,37 @@ Fields not listed for a project are not written yet, so they are not known.
     - WhatsApp reply (WhatsApp): Sends the buddy's answer back.
     - Manager dashboard (React): The manager sees each new developer’s progress.
 
-### TeamMatch AI · P02 · page /projects/teammatch-ai
+### TableTalk AI · P02 · page /projects/tabletalk-ai
+- Description: Voice receptionist that books, changes and cancels restaurant tables in Urdu and English.
+- Category: AI Automation. Status: Completed.
+- Tech: Voice AI, ElevenLabs, n8n, Google Sheets.
+- Code: https://github.com/CodeWithNouman99/n8n-automation-projects/tree/main/tabletalk-ai
+- Live demo: https://elevenlabs.io/app/talk-to?agent_id=agent_0101m7ndx4kyfbv818qrs81hb9ce
+- Problem (summary card): Busy restaurants miss calls at peak hours, and bookings live in a notebook.
+- Solution (summary card): Ayesha, an ElevenLabs voice agent, answers every call, books tables and saves them live to Google Sheets through n8n.
+- Result (summary card): Book, change and cancel tested end to end on real calls, with one clean row per booking.
+- Overview: Callers speak Urdu or English. Ayesha answers menu, timing and parking questions from a knowledge base, and uses two webhook tools to write bookings into a Google Sheet. Changes and cancellations find the booking by phone number.
+- Architecture (the "How it works" diagram on the page):
+  - Note: Every booking gets a reservation ID that Ayesha reads back to the caller.
+  - Caller → Ayesha
+  - Ayesha uses the tool Knowledge base
+  - Ayesha → book_reservation
+  - book_reservation → n8n: append row
+  - n8n: append row → Google Sheets
+  - Ayesha → update_reservation
+  - update_reservation → Safety check
+  - Safety check → Google Sheets
+  - What each step does:
+    - Caller (Phone / web): A guest calls and speaks in Urdu or English.
+    - Ayesha (ElevenLabs): Voice agent that listens, replies and decides which tool to use.
+    - Knowledge base (RAG): Menu, deals, timings and policies, so prices are never made up.
+    - book_reservation (Webhook tool): Sends name, phone, date, time, guests and seating to n8n.
+    - n8n: append row (n8n): Creates an ID like LTH-261118004454 and saves the booking.
+    - Google Sheets (Database): One row per booking with status Confirmed, Changed or Cancelled.
+    - update_reservation (Webhook tool): Finds the booking by phone, then changes or cancels it.
+    - Safety check (IF node): Cancels only if no new date, time or guests were sent.
+
+### TeamMatch AI · P03 · page /projects/teammatch-ai
 - Description: Multi-agent system that matches a software house's developers to client requests.
 - Category: Full-Stack, AI Automation. Status: Completed.
 - Tech: MERN, n8n, RAG.
@@ -66,7 +96,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - MongoDB (MongoDB): Stores the requests and the team options.
     - React dashboard (approve a team) (React): A person picks a team; its members are booked as tentative.
 
-### AI Job Hunter · P03 · page /projects/ai-job-hunter
+### AI Job Hunter · P04 · page /projects/ai-job-hunter
 - Description: Finds remote and Pakistan jobs, scores them against my CV with RAG and writes cover letters.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n, Gemini, Supabase, RAG.
@@ -98,7 +128,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - WhatsApp: jobs · letter · applied (WhatsApp): I message the assistant from my own number.
     - WF4 WhatsApp Assistant (AI agent): Shows my top jobs, sends a cover letter or marks a job as applied.
 
-### WhatsApp Doctor Appointment Bot · P04 · page /projects/whatsapp-bot
+### WhatsApp Doctor Appointment Bot · P05 · page /projects/whatsapp-bot
 - Description: AI agent that books, reschedules and cancels appointments.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n.
@@ -129,7 +159,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Stripe Trigger (Stripe): Starts when a payment comes in.
     - Payment confirmation on WhatsApp (WhatsApp): Confirms the payment to the patient.
 
-### Client Onboarding Automation · P05 · page /projects/client-onboarding
+### Client Onboarding Automation · P06 · page /projects/client-onboarding
 - Description: An intake form triggers an n8n workflow that sets up each new client's Drive, Slack, Gmail and Calendar by project type.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n.
@@ -156,7 +186,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Welcome email (Gmail): Sends the client a welcome email.
     - Kickoff meeting (Calendar): Books the kickoff meeting in Google Calendar.
 
-### Hospital RAG Agent · P06 · page /projects/hospital-rag
+### Hospital RAG Agent · P07 · page /projects/hospital-rag
 - Description: Answers hospital questions from a knowledge-base PDF.
 - Category: AI Automation. Status: Completed.
 - Tech: n8n, Vector DB.
@@ -182,27 +212,35 @@ Fields not listed for a project are not written yet, so they are not known.
     - Hospital Data (Pinecone search) (Tool): Finds the most relevant parts of the documents.
     - Answer from the hospital's documents (Output): The reply is based on what the PDFs say.
 
-### Doctor Appointment Booking System · P07 · page /projects/doctor-appointment
-- Description: Patients book, doctors manage schedules, admins oversee.
-- Category: Full-Stack. Status: In Progress.
-- Tech: MERN.
+### Doctor Appointment Booking System · P08 · page /projects/doctor-appointment
+- Description: Full-stack booking platform for patients, doctors and admins.
+- Category: Full-Stack. Status: Completed.
+- Tech: React, Tailwind CSS, Node.js, Express, MongoDB, Cloudinary, Vercel.
 - Code: https://github.com/CodeWithNouman99/doctor-appointment-system-mern
-- Live demo: none yet.
-- Problem (summary card): Patients need a simple way to find a doctor and book a slot without calling the clinic.
-- Solution (summary card): A MERN app where patients browse doctors by speciality and book, and doctors and admins manage schedules.
-- Result (summary card): In progress: the patient pages are built, the backend is being built next.
+- Live demo: https://doctor-appointment-frontend-azure.vercel.app
+- Problem (summary card): Patients need a simple way to find a doctor and book a slot without calling the clinic, and double bookings must never happen.
+- Solution (summary card): A MERN app with three roles (patient, admin, doctor). Booking reserves the slot in one atomic database update and validates every slot on the server.
+- Result (summary card): Live on Vercel: patient site, admin panel and doctor panel, with role-based JWT auth checked by a cross-role token test.
+- Overview: A full-stack appointment platform with patient, admin and doctor roles. I started from a tutorial base and extended it myself: role-based JWT auth, atomic slot booking, slot validation, auto-logout on token expiry, a real 7-day bookings chart on the admin dashboard, a complete doctor panel and a security audit with fixes.
+- How it works:
+  1. Patients browse doctors by speciality and pick a free slot in the next 7 days.
+  2. The server validates the slot (10:00 to 21:00, 30-minute steps, not in the past) and reserves it in a single database update, so two people cannot take the same slot.
+  3. Admins manage doctors and appointments and see real bookings per day; doctors complete or cancel their own appointments.
+  4. Separate patient, admin and doctor tokens carry a role claim, and every route rejects tokens of the wrong role.
+- Challenges: A security audit found that a doctor token was accepted on patient routes. I added a role claim and a role check, then re-ran a cross-role token test (476 checks) to confirm it. Six simultaneous requests for one slot now give exactly one booking.
+- Results: Deployed as three Vercel projects (patient site, admin and doctor panel, API). Admin panel: https://doctor-appointment-admin-ten.vercel.app. Payments are intentionally left as a future improvement.
 - Architecture (the "How it works" diagram on the page):
-  - Note: The frontend is built; the backend is in progress.
+  - Note: Three roles share one Express API; every route checks the role in the token.
   - Patient pages (React) → Express API
   - Doctor & admin panel (React) → Express API
   - Express API → MongoDB
   - What each step does:
     - Patient pages (React) (React): Patients browse doctors by speciality and book a slot.
     - Doctor & admin panel (React) (React): Doctors manage their schedule; admins oversee everything.
-    - Express API (Express): REST endpoints for doctors and bookings (in progress).
+    - Express API (Express): REST endpoints with role-based JWT auth and atomic slot booking.
     - MongoDB (MongoDB): Stores doctors, patients and appointments.
 
-### HireHub · P08 · page /projects/hirehub
+### HireHub · P09 · page /projects/hirehub
 - Description: Job portal with Clerk auth.
 - Category: Frontend. Status: Completed.
 - Tech: React, Tailwind, React Router, Clerk.
@@ -223,7 +261,7 @@ Fields not listed for a project are not written yet, so they are not known.
     - Job listings (Page): Visitors browse open jobs.
     - Post a job (Page): Employers add a new job listing.
 
-### Cartify · P09 · page /projects/cartify
+### Cartify · P10 · page /projects/cartify
 - Description: E-commerce frontend.
 - Category: Frontend. Status: Completed.
 - Tech: React.
