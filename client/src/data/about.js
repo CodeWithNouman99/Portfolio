@@ -1,20 +1,19 @@
-// Tile images: drop a photo at src/assets/about/<id>.(jpg|jpeg|png|webp) — it's shown in B&W automatically.
-// TODO: about tile photos
+// Home "Who I Am" section (sections/About.jsx): a statement whose second line rotates through `phrases`,
+// then the principles in a row. Numbers (01, 02, …) come from the order.
 export const about = {
   eyebrow: 'About me',
   title: 'Who I Am',
   watermark: 'About',
   intro: 'The person behind the projects.',
-  blocks: [
-    {
-      id: 'who',
-      heading: ['Who', 'Am I?'],
-      body: "I'm Nouman, a Software Engineering student in Faisalabad. I like owning a problem end to end, from the first sketch to the deployed app, and I'm happiest when something I built saves someone real time.",
-    },
-    {
-      id: 'work',
-      heading: ['How I', 'Work'],
-      body: 'I start from the problem, not the tool. I break it into small pieces, ship a working version fast, then improve it. Every project lives on GitHub with a clear README so anyone can see how it works.',
-    },
+  statement: {
+    lead: 'I build things that',
+    phrases: ['save hours every week.', 'run 24/7 on their own.', 'answer customers on WhatsApp.', 'actually ship.'],
+    // How long each phrase stays before the next one slides up
+    intervalMs: 2500,
+  },
+  principles: [
+    'Start from the problem, not the tool.',
+    'Ship a working version fast, then improve it.',
+    'Every project gets a README anyone can follow.',
   ],
 }

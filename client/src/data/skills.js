@@ -1,34 +1,3 @@
-export const skillMarquee = [
-  'MERN Stack',
-  'AI Automation',
-  'n8n Workflows',
-  'RAG Agents',
-  'REST APIs',
-  'React',
-  'Node.js',
-  'MongoDB',
-  'Multi-Agent Systems',
-  'Problem Solving',
-]
-
-export const techStack = [
-  'React',
-  'Node.js',
-  'Express',
-  'MongoDB',
-  'Tailwind CSS',
-  'JavaScript',
-  'n8n',
-  'Gemini',
-  'RAG',
-  'Vector DB',
-  'Git',
-  'GitHub',
-  'Vercel',
-  'Oracle SQL',
-  'Postman',
-]
-
 // Home "My stack" section (sections/TechStack.jsx): an orbit around `core`, one ring per entry.
 // Rings run from the centre outwards. `size` is the ring's diameter as a share of the orbit's width;
 // `seconds` is one full turn. `tone` styles the pills and the legend dot: 'accent' | 'default' | 'muted'.

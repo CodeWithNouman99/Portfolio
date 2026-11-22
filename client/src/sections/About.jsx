@@ -1,12 +1,6 @@
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion'
 import { about } from '../data/about'
-
-// Optional tile photos at src/assets/about/<block id>.<ext>
-const tileImages = Object.fromEntries(
-  Object.entries(
-    import.meta.glob('../assets/about/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' }),
-  ).map(([path, src]) => [path.split('/').pop().split('.')[0], src]),
-)
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -15,55 +9,47 @@ const fadeUp = {
 
 const inView = { initial: 'hidden', whileInView: 'show', viewport: { once: true, amount: 0.3 } }
 
-function ImageTile({ block, flipped }) {
-  const src = tileImages[block.id]
+// One phrase at a time, sliding up. Every phrase also sits invisibly in the same grid cell, so the line
+// keeps the height of the longest one and nothing below it jumps. Turns only while on screen;
+// with reduced motion it stays on the first phrase.
+function RotatingPhrase({ phrases, intervalMs }) {
+  const ref = useRef(null)
+  const visible = useInView(ref)
+  const reduced = useReducedMotion()
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (reduced || !visible || phrases.length < 2) return
+    const timer = setInterval(() => setIndex((i) => (i + 1) % phrases.length), intervalMs)
+    return () => clearInterval(timer)
+  }, [reduced, visible, phrases.length, intervalMs])
 
   return (
-    <motion.div
-      variants={fadeUp}
-      {...inView}
-      className={`group relative flex min-h-[260px] items-end overflow-hidden rounded-card bg-neutral-800 lg:min-h-[320px] ${
-        flipped ? 'lg:order-2' : ''
-      }`}
-    >
-      {src && (
-        <img
-          src={src}
-          alt=""
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out [filter:grayscale(100%)_contrast(1.1)] group-hover:scale-105"
-        />
-      )}
-      {/* Red duotone over the photo; softer wash on the dark fallback */}
-      <div
-        className={`absolute inset-0 ${
-          src
-            ? 'bg-[linear-gradient(to_top_right,rgba(255,49,49,0.65),transparent)]'
-            : 'bg-[linear-gradient(to_top_right,rgba(255,49,49,0.6),transparent_70%)]'
-        }`}
-      />
-      <h3 className="relative p-8 text-[40px] font-bold leading-[1.05] tracking-tight text-white md:p-10 md:text-[48px]">
-        {block.heading[0]}
-        <br />
-        {block.heading[1]}
-      </h3>
-    </motion.div>
-  )
-}
-
-function TextCard({ block }) {
-  return (
-    <motion.div
-      variants={fadeUp}
-      {...inView}
-      className="flex items-center rounded-card border border-border bg-paper p-8 md:p-10 lg:min-h-[320px]"
-    >
-      <p className="text-[15px] leading-body">{block.body}</p>
-    </motion.div>
+    <span ref={ref} className="grid overflow-hidden text-accent">
+      {phrases.map((phrase) => (
+        <span key={phrase} className="invisible [grid-area:1/1]">
+          {phrase}
+        </span>
+      ))}
+      <AnimatePresence initial={false}>
+        <motion.span
+          key={index}
+          className="[grid-area:1/1]"
+          initial={{ y: '100%' }}
+          animate={{ y: '0%' }}
+          exit={{ y: '-100%' }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {phrases[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   )
 }
 
 export default function About() {
+  const { statement, principles } = about
+
   return (
     <section id="about" className="relative overflow-hidden py-20 md:py-28">
       <div className="relative mx-auto max-w-[1280px] px-4 md:px-8">
@@ -83,14 +69,31 @@ export default function About() {
           <p className="max-w-sm text-[15px] text-muted md:text-right">{about.intro}</p>
         </motion.div>
 
-        <div className="relative mt-12 space-y-6 md:mt-16">
-          {about.blocks.map((block, i) => (
-            <div key={block.id} className="grid gap-6 lg:grid-cols-2">
-              <ImageTile block={block} flipped={i % 2 === 1} />
-              <TextCard block={block} />
-            </div>
+        <motion.div variants={fadeUp} {...inView} className="relative mt-12 md:mt-16">
+          <h3 className="text-[34px] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[44px] lg:text-[60px]">
+            {/* Screen readers get the whole statement once instead of a line that keeps changing */}
+            <span className="sr-only">
+              {statement.lead} {statement.phrases.join(' ')}
+            </span>
+            <span aria-hidden="true">
+              <span className="block text-muted">{statement.lead}</span>
+              <RotatingPhrase phrases={statement.phrases} intervalMs={statement.intervalMs} />
+            </span>
+          </h3>
+        </motion.div>
+
+        <motion.ol
+          variants={fadeUp}
+          {...inView}
+          className="relative mt-12 grid gap-8 border-t border-border pt-10 md:mt-16 md:grid-cols-3 md:gap-10"
+        >
+          {principles.map((text, i) => (
+            <li key={text}>
+              <span className="font-mono text-[12px] font-bold text-accent">{String(i + 1).padStart(2, '0')}</span>
+              <p className="mt-3 text-[17px] font-semibold leading-snug text-ink-heading md:text-[18px]">{text}</p>
+            </li>
           ))}
-        </div>
+        </motion.ol>
       </div>
     </section>
   )

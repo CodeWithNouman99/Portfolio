@@ -44,7 +44,6 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      {/* Moving skill strips (components/SkillMarquee + TechMarquee) replaced by a still grouped stack */}
       <TechStack />
       <About />
       <Projects />

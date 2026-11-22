@@ -53,14 +53,6 @@ export default {
         watermark: ['clamp(96px, 17vw, 240px)', { lineHeight: '1', fontWeight: '800' }],
       },
       keyframes: {
-        marquee: {
-          from: { transform: 'translateX(0)' },
-          to: { transform: 'translateX(-50%)' },
-        },
-        'marquee-reverse': {
-          from: { transform: 'translateX(-50%)' },
-          to: { transform: 'translateX(0)' },
-        },
         // Tech stack orbit: a ring turning once (pills turn back the same way to stay upright)
         orbit: {
           to: { transform: 'rotate(360deg)' },
@@ -81,8 +73,6 @@ export default {
       },
       animation: {
         'wire-dash': 'wire-dash 0.8s linear infinite',
-        marquee: 'marquee 60s linear infinite',
-        'marquee-reverse': 'marquee-reverse 80s linear infinite',
         orbit: 'orbit 60s linear infinite', // duration set per ring in TechStack.jsx
         'core-pulse': 'core-pulse 2.4s ease-out infinite',
         float: 'float 4s ease-in-out infinite',
