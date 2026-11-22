@@ -61,6 +61,15 @@ export default {
           from: { transform: 'translateX(-50%)' },
           to: { transform: 'translateX(0)' },
         },
+        // Tech stack orbit: a ring turning once (pills turn back the same way to stay upright)
+        orbit: {
+          to: { transform: 'rotate(360deg)' },
+        },
+        // Soft ring growing out of the orbit's core
+        'core-pulse': {
+          '0%': { transform: 'scale(1)', opacity: '0.4' },
+          '100%': { transform: 'scale(1.6)', opacity: '0' },
+        },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
@@ -74,6 +83,8 @@ export default {
         'wire-dash': 'wire-dash 0.8s linear infinite',
         marquee: 'marquee 60s linear infinite',
         'marquee-reverse': 'marquee-reverse 80s linear infinite',
+        orbit: 'orbit 60s linear infinite', // duration set per ring in TechStack.jsx
+        'core-pulse': 'core-pulse 2.4s ease-out infinite',
         float: 'float 4s ease-in-out infinite',
       },
     },
