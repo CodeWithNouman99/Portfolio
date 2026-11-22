@@ -18,6 +18,9 @@ const client = config.gemini.apiKey ? new GoogleGenerativeAI(config.gemini.apiKe
 
 export const geminiConfigured = Boolean(client)
 
+// The chat widget gives up after 20s: both attempts here plus Groq's 7s must fit inside that
+const TIMEOUTS_MS = [7000, 4000]
+
 // Overload / rate-limit / transient server errors are worth one more try on the fallback model
 const RETRYABLE = new Set([429, 500, 503, 504])
 const attempts = [...new Set([config.gemini.model, config.gemini.fallbackModel])]
@@ -40,7 +43,7 @@ export async function askGemini(messages, systemPrompt = SYSTEM_PROMPT) {
           systemInstruction: systemPrompt,
           generationConfig: { temperature: 0.4, responseMimeType: 'application/json', responseSchema: CHAT_SCHEMA },
         },
-        { timeout: 20000 },
+        { timeout: TIMEOUTS_MS[i] },
       )
       const text = (await model.generateContent({ contents })).response.text()?.trim()
       if (!text) throw new Error('Empty reply')

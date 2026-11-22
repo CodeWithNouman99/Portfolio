@@ -1,5 +1,5 @@
 import { config } from '../config.js'
-import { parseChatReply, systemPromptFor } from './chatPrompt.js'
+import { parseChatReply, shortPromptFor, systemPromptFor } from './chatPrompt.js'
 import { askGemini, geminiConfigured } from './gemini.js'
 import { askGroq, groqConfigured } from './groq.js'
 import { quickAnswer } from './quickAnswers.js'
@@ -8,13 +8,15 @@ import { quickAnswer } from './quickAnswers.js'
 export const FALLBACK_REPLY =
   "I'm getting a lot of questions right now. Email Nouman at mrnoumannomi7@gmail.com and he'll reply personally."
 
-// After a 429 a provider is skipped for a while, so visitors don't wait on a request that will fail
+// After a 429 a provider is skipped for a while, so visitors don't wait on a request that will fail.
+// Groq says how long in "retry-after" (usually seconds, as its limit is per minute).
 const COOLDOWN_MS = 10 * 60 * 1000
+const cooldownFor = (err) => Number(err.headers?.get?.('retry-after')) * 1000 || COOLDOWN_MS
 
 // Tried in this order; on any failure (429, 5xx, timeout, bad reply) the next one is used
 const providers = [
-  { name: 'gemini', configured: geminiConfigured, ask: askGemini, cooldownUntil: 0 },
-  { name: 'groq', configured: groqConfigured, ask: askGroq, cooldownUntil: 0 },
+  { name: 'gemini', configured: geminiConfigured, ask: askGemini, promptFor: systemPromptFor, cooldownUntil: 0 },
+  { name: 'groq', configured: groqConfigured, ask: askGroq, promptFor: shortPromptFor, cooldownUntil: 0 },
 ]
 
 // Development only: which provider answered each request
@@ -23,7 +25,6 @@ const devLog = (message) => config.isDev && console.log(`[chat] ${message}`)
 // messages: validated history ending with a user turn → { reply, projects }. Never throws.
 // projectSlug (optional): the project page the visitor asked from; answers focus on that project.
 export async function generateReply(messages, { projectSlug } = {}) {
-  const systemPrompt = systemPromptFor(projectSlug)
   // Quick answers are general, so a project-scoped question always goes to the model
   const quick = projectSlug ? null : quickAnswer(messages)
   if (quick) {
@@ -40,7 +41,7 @@ export async function generateReply(messages, { projectSlug } = {}) {
 
     const start = performance.now()
     try {
-      const { text, model } = await provider.ask(messages, systemPrompt)
+      const { text, model } = await provider.ask(messages, provider.promptFor(projectSlug))
       const result = parseChatReply(text)
       if (!result) throw new Error('No usable reply in the response')
       devLog(
@@ -50,7 +51,7 @@ export async function generateReply(messages, { projectSlug } = {}) {
       )
       return { reply: result.reply, projects: result.projects }
     } catch (err) {
-      if (err.status === 429) provider.cooldownUntil = Date.now() + COOLDOWN_MS
+      if (err.status === 429) provider.cooldownUntil = Date.now() + cooldownFor(err)
       devLog(`${provider.name} failed (${err.status ?? err.message}), trying the next provider`)
     }
   }

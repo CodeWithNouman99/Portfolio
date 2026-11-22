@@ -15,7 +15,7 @@ export const PROJECT_PAGES = new Map(
 export const PROJECT_IDS = [...knowledge.matchAll(/^### (P\d{2}) — /gm)].map(([, id]) => id)
 export const MAX_PROJECTS = 2
 
-const basePrompt = (scope) => `You are Nouman Aslam's portfolio assistant. Answer only questions about Nouman, his projects, skills, education and availability, using ONLY the knowledge below. Be short (2–4 sentences), friendly and confident. If something isn't in the knowledge, say you don't know and suggest emailing mrnoumannomi7@gmail.com. Never invent facts, numbers or links. Politely decline unrelated requests.
+const basePrompt = (scope, facts) => `You are Nouman Aslam's portfolio assistant. Answer only questions about Nouman, his projects, skills, education and availability, using ONLY the knowledge below. Be short (2–4 sentences), friendly and confident. If something isn't in the knowledge, say you don't know and suggest emailing mrnoumannomi7@gmail.com. Never invent facts, numbers or links. Politely decline unrelated requests.
 
 Style: write like a real person talking, in simple everyday words. Never use buzzwords such as "seamless", "streamline", "leverage", "cutting-edge", "robust", "revolutionize", "empower", "unlock", "elevate" or "innovative", and never use em dashes.
 
@@ -32,19 +32,47 @@ Output: respond with ONLY a JSON object, no text before or after it, exactly lik
 - "reply": your answer, following the rules above.
 - "projects": ids of at most ${MAX_PROJECTS} projects (${PROJECT_IDS.join(', ')}) that the reply is specifically about, most relevant first. Use an empty array when the reply is not about specific projects (greetings, availability, education, contact, unknowns).
 ${scope}
-${knowledge}
+${facts}`
 
-${projectKnowledge}`
+const fullKnowledge = `${knowledge}\n\n${projectKnowledge}`
+export const SYSTEM_PROMPT = basePrompt('', fullKnowledge)
 
-export const SYSTEM_PROMPT = basePrompt('')
+// Short knowledge for Groq, whose free tier caps prompt + max_tokens at 8,000 tokens per minute.
+// Built from the same two files: the main sections of nouman.md, plus a few lines per project from
+// projects.md (so status and demo links follow the project data).
+const SHORT_SKIPS = /^## (Projects|Journey|Writing|Job matching)/
+const shortProfile = knowledge
+  .split(/^(?=## )/m)
+  .filter((section) => section.startsWith('## ') && !SHORT_SKIPS.test(section))
+  .map((section) => section.split(/\r?\n/).filter((line) => !/live demo/i.test(line)).join('\n').trim())
+  .join('\n\n')
+
+const projectSections = projectKnowledge.split(/^(?=### )/m).filter((section) => section.startsWith('### '))
+const shortProjects = projectSections
+  .map((section) => {
+    const [heading, ...lines] = section.split(/\r?\n/)
+    const kept = lines.filter((line) => /^- (Description|Category|Tech|Live demo):/.test(line))
+    return [heading.replace(/ · page .*/, ''), ...kept].join('\n')
+  })
+  .join('\n')
+const shortKnowledge = `${shortProfile}\n\n## Projects (${projectSections.length} in total)\n${shortProjects}`
+
+const scopeFor = (title) =>
+  `\nCurrent page: The visitor is viewing the project ${title}. Focus your answer on this project, using only the knowledge provided. If the detail isn't in the knowledge, say so and suggest emailing Nouman.\n`
 
 // System prompt for one request; with a known projectSlug the answers focus on that project
 export function systemPromptFor(projectSlug) {
-  const title = projectSlug && PROJECT_PAGES.get(projectSlug)
-  if (!title) return SYSTEM_PROMPT
-  return basePrompt(
-    `\nCurrent page: The visitor is viewing the project ${title}. Focus your answer on this project, using only the knowledge provided. If the detail isn't in the knowledge, say so and suggest emailing Nouman.\n`,
-  )
+  const title = PROJECT_PAGES.get(projectSlug)
+  return title ? basePrompt(scopeFor(title), fullKnowledge) : SYSTEM_PROMPT
+}
+
+// The short version: on a project page it also gets that project's details, without the diagram
+export function shortPromptFor(projectSlug) {
+  const title = PROJECT_PAGES.get(projectSlug)
+  if (!title) return basePrompt('', shortKnowledge)
+  const section = projectSections.find((s) => s.startsWith(`### ${title} · `))
+  const details = section.split('- Architecture')[0].trim()
+  return basePrompt(scopeFor(title), `${shortKnowledge}\n\n## The project on this page\n${details}`)
 }
 
 const cleanProjects = (list) =>
