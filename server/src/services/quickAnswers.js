@@ -9,12 +9,12 @@ const ANSWERS = {
   },
   'is he open to internships': {
     reply:
-      "Yes! Nouman is open to internships and junior roles, especially at software houses, and also to freelance automation work. The best way to reach him is by email at mrnoumannomi7@gmail.com or on LinkedIn.",
+      "Yes! Nouman is open to internships and junior roles, especially at software houses, and also to freelance projects. The best way to reach him is by email at mrnoumannomi7@gmail.com or on LinkedIn.",
     projects: [],
   },
   'whats his tech stack': {
     reply:
-      'On the frontend he works with React.js, JavaScript (ES6+), Tailwind CSS, Context API and React Router. On the backend he uses Node.js, Express.js, REST APIs, MongoDB and Oracle SQL, and for AI automation he builds with n8n, Gemini, RAG with vector databases and multi-agent systems. His everyday tools are Git, GitHub, Postman and Vercel.',
+      'On the frontend he works with React.js, JavaScript (ES6+), HTML5/CSS3, Tailwind CSS, Context API, React Router and Vite, and he knows the basics of Next.js. On the backend he uses Node.js, Express.js, REST APIs, MongoDB, Oracle SQL and PostgreSQL via Supabase, and for AI automation he builds with n8n, Gemini, RAG with vector databases, multi-agent systems and the WhatsApp Cloud API. His everyday tools are Git, GitHub, Postman, Vercel, Clerk and Claude Code.',
     projects: [],
   },
 }

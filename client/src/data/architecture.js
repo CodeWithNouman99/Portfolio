@@ -123,7 +123,7 @@ export const architecture = {
     nodes: [
       { id: 'portal', label: 'HR portal (React)', tag: 'React', x: 8, y: 20, note: 'HR adds a new developer with a short form.' },
       { id: 'webhook', label: 'n8n Webhook', tag: 'n8n', x: 30, y: 20, note: 'Receives the new developer from the portal.' },
-      { id: 'sheet', label: 'Google Sheets: developers & progress', tag: 'Google Sheets', x: 54, y: 20, note: 'Keeps each developer and the tasks they have finished.' },
+      { id: 'sheet', label: 'Express API + MongoDB', tag: 'MongoDB', x: 54, y: 20, note: 'Keeps each developer and the tasks they have finished. n8n reads and updates it through the API.' },
       { id: 'welcome', label: 'WhatsApp welcome', tag: 'WhatsApp', x: 80, y: 20, note: 'The new developer gets a welcome message on day one.' },
       { id: 'msg', label: 'WhatsApp message', tag: 'WhatsApp', x: 8, y: 80, note: 'The developer asks a question or says a task is done.' },
       { id: 'agent', label: 'AI Buddy (Gemini)', tag: 'AI agent', x: 32, y: 80, ai: true, note: 'Answers from company docs, logs questions and marks tasks done.' },

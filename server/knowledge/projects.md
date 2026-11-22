@@ -4,26 +4,26 @@ Fields not listed for a project are not written yet, so they are not known.
 ### DevBuddy · P01 · page /projects/devbuddy
 - Description: AI onboarding buddy for new developers at software houses.
 - Category: Full-Stack, AI Automation. Status: Completed.
-- Tech: n8n, React, Webhooks, Google Sheets, AI Agent.
+- Tech: React, Express, MongoDB, n8n, WhatsApp, AI Agent.
 - Code: https://github.com/CodeWithNouman99/devbuddy-portal
 - Live demo: https://devbuddy-portal.vercel.app
 - Problem (summary card): A new developer's first week depends on someone being free to answer questions and assign tasks.
-- Solution (summary card): HR adds the developer on a portal; an n8n AI buddy on WhatsApp answers from company docs and sends daily tasks.
+- Solution (summary card): HR adds the developer on a MERN portal (React, Express, MongoDB); n8n workflows and a WhatsApp AI agent answer from company docs and send daily tasks.
 - Result (summary card): HR portal and manager dashboard are live on Vercel, tested end to end with a WhatsApp welcome.
 - Architecture (the "How it works" diagram on the page):
   - Note: A separate daily flow sends each developer their next task and alerts the manager.
   - HR portal (React) → n8n Webhook
-  - n8n Webhook → Google Sheets: developers & progress
-  - Google Sheets: developers & progress → WhatsApp welcome
+  - n8n Webhook → Express API + MongoDB
+  - Express API + MongoDB → WhatsApp welcome
   - WhatsApp message → AI Buddy (Gemini)
   - AI Buddy (Gemini) uses the tool Company docs
-  - AI Buddy (Gemini) uses the tool Google Sheets: developers & progress
+  - AI Buddy (Gemini) uses the tool Express API + MongoDB
   - AI Buddy (Gemini) → WhatsApp reply
-  - Google Sheets: developers & progress → Manager dashboard
+  - Express API + MongoDB → Manager dashboard
   - What each step does:
     - HR portal (React) (React): HR adds a new developer with a short form.
     - n8n Webhook (n8n): Receives the new developer from the portal.
-    - Google Sheets: developers & progress (Google Sheets): Keeps each developer and the tasks they have finished.
+    - Express API + MongoDB (MongoDB): Keeps each developer and the tasks they have finished. n8n reads and updates it through the API.
     - WhatsApp welcome (WhatsApp): The new developer gets a welcome message on day one.
     - WhatsApp message (WhatsApp): The developer asks a question or says a task is done.
     - AI Buddy (Gemini) (AI agent): Answers from company docs, logs questions and marks tasks done.

@@ -4,7 +4,7 @@ export const profile = {
   lastName: 'Aslam',
   location: 'Faisalabad, Pakistan',
   role: 'AI Automation Builder & MERN Developer',
-  availability: 'Open to internships & junior roles',
+  availability: 'Open to freelance projects, internships & junior roles',
   tagline: 'Code that ships, not just compiles.',
 
   education: {

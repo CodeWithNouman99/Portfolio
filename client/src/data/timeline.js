@@ -53,7 +53,7 @@ export const timeline = {
       id: '07',
       year: 'Now',
       title: 'Open to Opportunities',
-      subtitle: 'Internships & junior roles at software houses',
+      subtitle: 'Freelance projects, plus internships & junior roles at software houses',
       image: 'journey/now.png',
     },
   ],

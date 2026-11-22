@@ -2,7 +2,7 @@ export const contact = {
   eyebrow: "Let's Connect",
   title: 'Get In Touch',
   watermark: 'Connect',
-  subtitle: "Have a role, a project or an idea? Let's talk.",
+  subtitle: "Need a WhatsApp bot, voice agent or AI automation for your business, or have a role for me? Let's talk.",
   form: {
     submit: 'Send Message',
     sending: 'Sending…',

@@ -3,7 +3,7 @@
 // `icon` picks the node icon in Services.jsx.
 export const services = {
   eyebrow: 'What I do',
-  title: 'I turn your team’s problems into running workflows.',
+  title: 'I turn your business’s repetitive work into running workflows.',
   watermark: 'Services',
   intro: 'Pick a node to see what I build, the tools I use and the projects that prove it.',
   file: 'nouman / my-services.json',
