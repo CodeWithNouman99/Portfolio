@@ -10,8 +10,9 @@ const CHAT_SCHEMA = {
       type: SchemaType.ARRAY,
       items: { type: SchemaType.STRING, format: 'enum', enum: PROJECT_IDS },
     },
+    clientQuestion: { type: SchemaType.BOOLEAN },
   },
-  required: ['reply', 'projects'],
+  required: ['reply', 'projects', 'clientQuestion'],
 }
 
 const client = config.gemini.apiKey ? new GoogleGenerativeAI(config.gemini.apiKey) : null

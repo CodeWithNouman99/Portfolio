@@ -1,5 +1,6 @@
 import { config } from '../config.js'
-import { parseChatReply, shortPromptFor, systemPromptFor } from './chatPrompt.js'
+import { PROJECT_PAGE_IDS, PROJECT_TITLES, parseChatReply, shortPromptFor, systemPromptFor } from './chatPrompt.js'
+import { clientWorkAnswer, isCapabilityQuestion, isClientQuestion } from './clientWork.js'
 import { askGemini, geminiConfigured } from './gemini.js'
 import { askGroq, groqConfigured } from './groq.js'
 import { quickAnswer } from './quickAnswers.js'
@@ -32,6 +33,13 @@ export async function generateReply(messages, { projectSlug } = {}) {
     return quick
   }
 
+  const question = messages.at(-1).content
+  const clientAnswer = () => clientWorkAnswer(question, PROJECT_TITLES, PROJECT_PAGE_IDS.get(projectSlug))
+  if (isClientQuestion(question)) {
+    devLog('client question, answered by clientWork.js (no AI call)')
+    return clientAnswer()
+  }
+
   for (const provider of providers) {
     if (!provider.configured) continue
     if (provider.cooldownUntil > Date.now()) {
@@ -49,7 +57,12 @@ export async function generateReply(messages, { projectSlug } = {}) {
           result.parsed ? '' : ', plain text (no JSON)'
         }`,
       )
-      return { reply: result.reply, projects: result.projects }
+      if (!result.clientQuestion) return { reply: result.reply, projects: result.projects }
+      if (!isCapabilityQuestion(question)) return clientAnswer()
+      // A skills or "can he build" question the model mistook for a client question: keep its answer,
+      // minus the client-work opener it tends to add ("No client work is listed yet. He knows …")
+      const reply = result.reply.replace(/^No client work is listed( for Nouman)? yet(\.\s*|,\s*but\s+)/i, '')
+      return { reply: reply.charAt(0).toUpperCase() + reply.slice(1), projects: result.projects }
     } catch (err) {
       if (err.status === 429) provider.cooldownUntil = Date.now() + cooldownFor(err)
       devLog(`${provider.name} failed (${err.status ?? err.message}), trying the next provider`)
