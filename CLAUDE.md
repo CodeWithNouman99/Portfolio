@@ -61,7 +61,7 @@ Signature effects:
 8. **Build Logs** (currently hidden: removed from the page and navbar, files kept; replaces reference "Blog") — eyebrow "WRITING", H2 "Build Logs", watermark "LOGS"; first post as a large horizontal card (image left, text right, red category label, date, "See Details →"), others in a grid.
 9. **Certifications** (styled like reference "Publications") — numbered list rows with issuer, year, "Verify ↗" link; side card with total count.
 10. **Contact** — eyebrow "LET'S CONNECT", H2 "Get In Touch", watermark "CONNECT", subtitle, contact form (name, email, company, message) + two buttons (black filled email, white outlined LinkedIn). Wave texture background.
-11. **Footer** — social icons left, "Personal portfolio / 2026" center, "© 2026 Nouman Aslam. All rights reserved." right.
+11. **Footer** — desktop (xl+, 1280px): social icons + "© 2026 Nouman Aslam. All rights reserved." left, availability pill (pulsing green dot + `profile.availability`) center, "Personal portfolio / 2026" right. Below xl: one centred column with the pill on its own line.
 12. **Floating AI chat** (global, bottom-right on every page): round avatar button (cartoon/illustrated avatar of Nouman) + white speech bubble "Ask me about Nouman 👋". Click → white card panel (~360px) with small grey "Chat" chip, title "Ask me about Nouman", close ✕, bot message bubble in light grey, input "Ask about projects, skills or availability…" and red "Send" button. Answers come from `server` (`POST /api/chat`) using Gemini + Nouman's data as context.
 
 ## Nouman's content (source data)
